@@ -7,9 +7,35 @@
 #include <math.h>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 using namespace cv;
 using namespace std;
+
+
+bool sortByCircularityPredicate(vector<double> p_1, vector<double> p_2)
+{
+    return p_1[2] < p_2[2];
+}
+
+
+bool pupilFound(RotatedRect p_rect)
+{
+    return p_rect.center.x != -1 && p_rect.center.y != -1;
+}
+
+
+void drawMeasurePoint(Mat& p_image, Point p_point)
+{
+    Scalar green = Scalar(0,255,0);
+    Scalar red = Scalar(0,0,255);
+    int cross_size = 20;
+
+    circle(p_image, p_point, 10, red, 2, -1);
+    line(p_image, Point(p_point.x-cross_size, p_point.y), Point(p_point.x+cross_size, p_point.y), green, 2);
+    line(p_image, Point(p_point.x, p_point.y-cross_size), Point(p_point.x, p_point.y+cross_size), green, 2);
+}
+
 
 int main(int argc, char** argv)
 {
@@ -39,15 +65,43 @@ int main(int argc, char** argv)
     double sec;
 
     // init frames
-    Mat frame, gray, equalized, thresholded, blurred, inverted, objects;
-    int thresh = 8;
-    //Mat structElement = getStructuringElement(MORPH_RECT, Size(3,3));
+    Mat frame, gray, equalized, thresholded, inverted;
+    int thresh = 5;
 
-    // object propertes
+    // contours
     vector<vector<Point> > contours;
     vector<Vec4i> hierarchy;
 
+    // object properties
     vector<vector<double> > properties;
+
+    // previous objects
+    vector<RotatedRect> positions;
+    bool notFound = false;
+    int errors = 0;
+    RotatedRect init = RotatedRect(Point(320,240), Size(100,100), 0);
+
+    // measurement vector
+    vector<Point> measurePoints;
+    vector<RotatedRect> measureValues;
+
+    int screen_width = 1366;
+    int screen_height = 768;
+    int grid_size = 100;
+
+    int start_x = (screen_width%grid_size)/2;
+    int start_y = (screen_height%grid_size)/2;
+
+    for (int i=0; i<(screen_height/grid_size)+1; i++)
+    {
+        for (int j=0; j<(screen_width/grid_size)+1; j++)
+        {
+            measurePoints.push_back(Point(start_y+j*grid_size, start_x+i*grid_size));
+        }
+    }
+
+    Mat measureImage = Mat(screen_height, screen_width, CV_8UC3);
+    int measureIndex = -1;
 
     // init GUI
     namedWindow("Original", WINDOW_AUTOSIZE);
@@ -57,7 +111,7 @@ int main(int argc, char** argv)
 
     createTrackbar("Threshold", "Objects", &thresh, 255);
 
-    // start measuring
+    // start measuring fps
     time(&start);
 
     // main loop
@@ -74,28 +128,24 @@ int main(int argc, char** argv)
         equalizeHist(gray, equalized);
         threshold(equalized, thresholded, thresh, 255, THRESH_BINARY);
 
-        // blur
-        //morphologyEx(out, out, MORPH_CLOSE, structElement);
-        //morphologyEx(out, out, MORPH_OPEN, structElement);
-        medianBlur(thresholded, blurred, 3);
-
         // inverse for contour finding
-        inverted=255-blurred;
+        inverted=255-thresholded ;
+
+        // image for objects
+        Mat objects = Mat::zeros(inverted.rows, inverted.cols, CV_8UC3);
+
+        // reset found counter
+        notFound = false;
 
         // find contours
-        findContours(inverted, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
-
-        Mat objects = Mat::zeros(inverted.rows, inverted.cols, CV_8UC3);
+        findContours(inverted, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 
         // if contours found
         if (contours.size() > 0)
         {
-            // init
-            double maxArea = 0;
-            int maxIndex = 0;
             properties.clear();
 
-            // iterate through first-level contours
+            // gather contour information
             for(int idx=0; idx >= 0; idx = hierarchy[idx][0] )
             {
                 // set contour's convex hull
@@ -106,49 +156,108 @@ int main(int argc, char** argv)
                 double perimeter = arcLength(contours[idx], true);
                 double circularity = perimeter/(2*sqrt(M_PI*area));
 
-                // save properties
-                vector<double> props;
-                props.push_back(idx);
-                props.push_back(area);
-                props.push_back(perimeter);
-                props.push_back(circularity);
-
-                properties.push_back(props);
-
-                if(area > maxArea)
+                // only for significant contours
+                if (area > 2500)
                 {
-                    maxArea = area;
-                    maxIndex = idx;
-                }
+                    // save properties
+                    vector<double> props;
+                    props.push_back(idx);           // 0
+                    props.push_back(area);          // 1
+                    props.push_back(circularity);   // 2
 
-                /*
-                // draw object with green
-                Scalar green(0, 255, 0);
-                drawContours(objects, contours, idx, green, CV_FILLED, 8, hierarchy, 0);
+                    properties.push_back(props);
 
-                // draw ellipses to original
-                if(contours[idx].size() > 5)
-                {
-                    RotatedRect ell = fitEllipse(contours[idx]);
-                    ellipse(frame, ell, green, 2);
-                    circle(frame, ell.center, 2, green, 2);
+                    // draw object with green
+                    Scalar green(0, 255, 0);
+                    drawContours(objects, contours, idx, green, CV_FILLED, 8, hierarchy, 0);
                 }
-                */
             }
 
-            /*
-            // MAX AREA OBJECT
-            // draw maximum-area object with red
-            Scalar red(0, 0, 255);
-            drawContours(objects, contours, maxIndex, red, CV_FILLED, 8, hierarchy, 0);
-
-            if(contours[maxIndex].size() > 5)
+            if (properties.size() > 0)
             {
-                RotatedRect ell = fitEllipse(contours[maxIndex]);
-                ellipse(frame, ell, red, 2);
-                circle(frame, ell.center, 2, red, 2);
+                // sort by fitness value
+                sort(properties.begin(), properties.end(), sortByCircularityPredicate);
+
+                // select pupil center
+                int pupilIndex = properties[0][0];
+
+                // if circular enough
+                if(properties[0][2] < 1.07)
+                {
+                    // must have enough points
+                    if(contours[pupilIndex].size() > 5)
+                    {
+                        // -----------
+                        // PUPIL FOUND
+                        RotatedRect ell = fitEllipse(contours[pupilIndex]);
+                        positions.push_back(ell);
+
+                        // draw object with red
+                        Scalar red(0, 0, 255);
+                        drawContours(objects, contours, pupilIndex, red, CV_FILLED, 8, hierarchy, 0);
+                    }
+                    else
+                    {
+                        notFound = true;
+                    }
+                }
+                else
+                {
+                    notFound = true;
+                }
             }
-            */
+            else
+            {
+                notFound = true;
+            }
+        }
+        else
+        {
+            notFound = true;
+        }
+
+
+        // if no pupil found use the last one
+        if (notFound == true)
+        {
+            errors++;
+
+            if (positions.size() == 0)
+            {
+                positions.push_back(init);
+            }
+            else
+            {
+                if (errors < 5)
+                {
+                    // just use last value
+                    positions.push_back(positions.back());
+                }
+                else
+                {
+                    positions.push_back(RotatedRect(Point(-1,-1),Size(0,0),0));
+                }
+            }
+        }
+        else
+        {
+            errors = 0;
+        }
+
+
+        // ellipse of the eye
+        RotatedRect eyePosition = positions.back();
+
+
+        // if eye is opened
+        if (pupilFound(eyePosition))
+        {
+            // ----------
+            // DRAW PUPIL
+            Scalar red(0, 0, 255);
+
+            ellipse(frame, eyePosition, red, 2);
+            circle(frame, eyePosition.center, 2, red, 2);
         }
 
         /*
@@ -172,13 +281,23 @@ int main(int argc, char** argv)
         fps = counter/sec;
 
         stringstream s;
-        s << fps;
+        s.precision(2);
+        s << fixed << "FPS: " << fps << " | ";
+
+        if (pupilFound(eyePosition))
+        {
+            s << "Eye position: (" << eyePosition.center.x << "," << eyePosition.center.y << ")";
+        }
+        else
+        {
+            s << "Eye closed";
+        }
 
         displayStatusBar("Original", s.str(), 1000);
 
         // render images
         imshow("Original", frame);
-        //imshow("Objects", objects);
+        imshow("Objects", objects);
 
         // quit
         int c = waitKey(1);
@@ -186,6 +305,67 @@ int main(int argc, char** argv)
         {
            break;
         }
+        // save data
+        else if (c == '\r')
+        {
+            if (measureIndex < (int)measurePoints.size())
+            {
+                if (measureIndex == -1)
+                {
+                    // open measurement window
+                    namedWindow("Measurement", CV_WINDOW_AUTOSIZE | CV_GUI_NORMAL);
+                    cvSetWindowProperty("Measurement", CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
+                }
+                else
+                {
+                    // save stuff
+                    measureValues.push_back(eyePosition);
+                }
+
+                // next point
+                measureIndex++;
+
+                // render next point
+                measureImage.setTo(Scalar(0,0,0));
+                drawMeasurePoint(measureImage, measurePoints[measureIndex]);
+                imshow("Measurement", measureImage);
+
+                // destroy window if necessary
+                if (measureIndex == measurePoints.size())
+                {
+                    destroyWindow("Measurement");
+                }
+            }
+        }
+    }
+
+
+    // save if measurement if complete
+    if (measureIndex == measurePoints.size())
+    {
+        // set filename to current date
+        time_t t = time(0);
+        struct tm *now = localtime(&t);
+
+        stringstream filename;
+        filename << (now->tm_year + 1900) << "-" << (now->tm_mon + 1) << "-" << now->tm_mday << "_" << now->tm_hour << "-" << now->tm_min << "-" << now->tm_sec << ".txt";
+
+        ofstream outfile;
+        outfile.open(filename.str().c_str());
+
+        for (unsigned int i = 0; i<measurePoints.size(); i++)
+        {
+            outfile << measurePoints[i].x << ";"
+                    << measurePoints[i].y << ";"
+                    << measureValues[i].center.x << ";"
+                    << measureValues[i].center.y << ";"
+                    << measureValues[i].size.width << ";"
+                    << measureValues[i].size.height << ";"
+                    << measureValues[i].angle << endl;
+        }
+
+        outfile.close();
+
     }
 
     return 0;
