@@ -37,6 +37,18 @@ void drawMeasurePoint(Mat& p_image, Point p_point)
 }
 
 
+void drawDisplayPoint(Mat& p_image, Point p_point)
+{
+    Scalar yellow = Scalar(0,255,255);
+    Scalar red = Scalar(0,0,255);
+    int cross_size = 20;
+
+    circle(p_image, p_point, 10, red, 2, -1);
+    line(p_image, Point(p_point.x-cross_size, p_point.y), Point(p_point.x+cross_size, p_point.y), yellow, 2);
+    line(p_image, Point(p_point.x, p_point.y-cross_size), Point(p_point.x, p_point.y+cross_size), yellow, 2);
+}
+
+
 int main(int argc, char** argv)
 {
     VideoCapture cap;
@@ -85,8 +97,8 @@ int main(int argc, char** argv)
     vector<Point> measurePoints;
     vector<RotatedRect> measureValues;
 
-    int screen_width = 1366;
-    int screen_height = 768;
+    int screen_width = 1280;
+    int screen_height = 1024;
     int grid_size = 100;
 
     int start_x = (screen_width%grid_size)/2;
@@ -96,12 +108,34 @@ int main(int argc, char** argv)
     {
         for (int j=0; j<(screen_width/grid_size)+1; j++)
         {
-            measurePoints.push_back(Point(start_y+j*grid_size, start_x+i*grid_size));
+            measurePoints.push_back(Point(start_x+j*grid_size, start_y+i*grid_size));
         }
     }
 
     Mat measureImage = Mat(screen_height, screen_width, CV_8UC3);
     int measureIndex = -1;
+
+    // calibration
+    Vector<Point> calibPoints;
+    Vector<Point> calibValues;
+
+    int calibPadding = 10;
+
+    calibPoints.push_back(Point(calibPadding, calibPadding));
+    calibPoints.push_back(Point(screen_width-calibPadding, calibPadding));
+    calibPoints.push_back(Point(screen_width-calibPadding, screen_height-calibPadding));
+    calibPoints.push_back(Point(calibPadding, screen_height-calibPadding));
+
+    Mat calibImage = Mat(screen_height, screen_width, CV_8UC3);
+    int calibIndex = -1;
+
+    Point screenPosition;
+
+    // display
+    Mat displayImage = Mat(screen_height, screen_width, CV_8UC3);
+    bool displayOn = false;
+
+    Mat testImage = imread("repin_FINAL.jpg");
 
     // init GUI
     namedWindow("Original", WINDOW_AUTOSIZE);
@@ -260,19 +294,61 @@ int main(int argc, char** argv)
             circle(frame, eyePosition.center, 2, red, 2);
         }
 
-        /*
-        // draw Eye region
-        Scalar yellow(0,255,255);
-        Point upperleft = Point(289,264);
-        Point upperright = Point(475,217);
-        Point lowerright = Point(459,281);
-        Point lowerleft = Point(302,307);
+        // render calibration quadriliteral and calculate actual position
+        if (calibValues.size() == 4)
+        {
+            // draw Eye region
+            Scalar yellow(0,255,255);
+            Point a = calibValues[0];
+            Point b = calibValues[1];
+            Point c = calibValues[2];
+            Point d = calibValues[3];
 
-        line(frame, upperleft, upperright, yellow, 2, 8);
-        line(frame, upperright, lowerright, yellow, 2, 8);
-        line(frame, lowerright, lowerleft, yellow, 2, 8);
-        line(frame, lowerleft, upperleft, yellow, 2, 8);
-        */
+            line(frame, a, b, yellow, 2, 8);
+            line(frame, b, c, yellow, 2, 8);
+            line(frame, c, d, yellow, 2, 8);
+            line(frame, d, a, yellow, 2, 8);
+
+            // calculate position
+            Point p = eyePosition.center;
+
+            double C = (double)(a.y - p.y) * (d.x - p.x) - (double)(a.x - p.x) * (d.y - p.y);
+            double B = (double)(a.y - p.y) * (c.x - d.x) + (double)(b.y - a.y) * (d.x - p.x) - (double)(a.x - p.x) * (c.y - d.y) - (double)(b.x - a.x) * (d.y - p.y);
+            double A = (double)(b.y - a.y) * (c.x - d.x) - (double)(b.x - a.x) * (c.y - d.y);
+
+            double D = B * B - 4 * A * C;
+
+            double u = (-B - sqrt(D)) / (2 * A);
+
+            double p1x = a.x + (b.x - a.x) * u;
+            double p2x = d.x + (c.x - d.x) * u;
+
+            double px = p.x;
+
+            double v = (px - p1x) / (p2x - p1x);
+
+            // calculate screen coordinates
+            screenPosition.x = u*(screen_width-2*calibPadding)+calibPadding;
+            screenPosition.y = v*(screen_height-2*calibPadding)+calibPadding;
+        }
+
+        // display stuff on screen position
+        if (displayOn)
+        {
+            // clear and draw actual point
+            displayImage.setTo(Scalar(0,0,0));
+
+            // draw to ROI
+            Rect roi = Rect((displayImage.cols-testImage.cols)/2, (displayImage.rows-testImage.rows)/2, testImage.cols, testImage.rows);
+            Mat roiImg(displayImage, roi);
+            testImage.copyTo(roiImg);
+
+            // draw display point
+            drawDisplayPoint(displayImage, screenPosition);
+
+            // show image
+            imshow("Display", displayImage);
+        }
 
         // calculate current fps
         time(&end);
@@ -293,6 +369,8 @@ int main(int argc, char** argv)
             s << "Eye closed";
         }
 
+        s << " | Screen position: (" << screenPosition.x << "," << screenPosition.y << ")";
+
         displayStatusBar("Original", s.str(), 1000);
 
         // render images
@@ -306,7 +384,7 @@ int main(int argc, char** argv)
            break;
         }
         // save data
-        else if (c == '\r')
+        else if (c == 'k')
         {
             if (measureIndex < (int)measurePoints.size())
             {
@@ -335,6 +413,56 @@ int main(int argc, char** argv)
                 {
                     destroyWindow("Measurement");
                 }
+            }
+        }
+        // calibrate
+        else if (c == 'c')
+        {
+            if (calibIndex == -1)
+            {
+                // clear previous calibration data
+                calibValues.clear();
+
+                // open measurement window
+                namedWindow("Calibration", CV_WINDOW_AUTOSIZE | CV_GUI_NORMAL);
+                cvSetWindowProperty("Calibration", CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
+            }
+            else
+            {
+                calibValues.push_back(eyePosition.center);
+            }
+
+            // next point
+            calibIndex++;
+
+            // render next point
+            calibImage.setTo(Scalar(0,0,0));
+            drawMeasurePoint(calibImage, calibPoints[calibIndex]);
+            imshow("Calibration", calibImage);
+
+            // destroy window if necessary
+            if (calibIndex == calibPoints.size())
+            {
+                destroyWindow("Calibration");
+                calibIndex = -1;
+            }
+        }
+        // display
+        else if (c == 'd')
+        {
+            if (!displayOn)
+            {
+                // open measurement window
+                namedWindow("Display", CV_WINDOW_AUTOSIZE | CV_GUI_NORMAL);
+                cvSetWindowProperty("Display", CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
+
+                displayOn = true;
+            }
+            else
+            {
+                destroyWindow("Display");
+
+                displayOn = false;
             }
         }
     }
