@@ -29,7 +29,7 @@ void VideoHandler::startVideo(int cameraIdx)
 
 void VideoHandler::stopVideo()
 {
-    cap.release();
+    //cap.release();
 }
 
 Mat VideoHandler::getFrame()

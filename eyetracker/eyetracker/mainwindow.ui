@@ -369,7 +369,7 @@
     <string>Exit</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+X</string>
+    <string>Esc</string>
    </property>
   </action>
   <action name="actionAbout">
