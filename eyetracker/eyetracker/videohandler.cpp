@@ -2,7 +2,12 @@
 
 #include <QDebug>
 
-VideoHandler::VideoHandler(int cameraIdx)
+VideoHandler::VideoHandler()
+{
+
+}
+
+void VideoHandler::startVideo(int cameraIdx)
 {
     cap.open(cameraIdx);
     cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
@@ -20,6 +25,11 @@ VideoHandler::VideoHandler(int cameraIdx)
         qDebug() << "Could not initialize capturing...\n";
         return;
     }
+}
+
+void VideoHandler::stopVideo()
+{
+    cap.release();
 }
 
 Mat VideoHandler::getFrame()

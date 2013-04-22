@@ -9,7 +9,10 @@ using namespace cv;
 class VideoHandler
 {
 public:
-    VideoHandler(int cameraIdx);
+    VideoHandler();
+
+    void startVideo(int cameraIdx);
+    void stopVideo();
 
     Mat getFrame();
     QImage convert(const Mat& mat);

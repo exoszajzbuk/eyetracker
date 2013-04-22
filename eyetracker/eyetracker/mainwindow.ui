@@ -51,6 +51,9 @@
        <height>240</height>
       </rect>
      </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
     </widget>
     <widget class="QPushButton" name="replayButton">
      <property name="enabled">
@@ -153,7 +156,7 @@
     <property name="title">
      <string>Record</string>
     </property>
-    <widget class="QLabel" name="videoCanvas">
+    <widget class="QLabel" name="videoPlaceholder">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -163,7 +166,7 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(128, 128, 128)</string>
+      <string notr="true">background-color: rgb(200, 200, 200)</string>
      </property>
      <property name="text">
       <string>Press Start</string>
@@ -182,7 +185,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>Start (Ctrl-S)</string>
+      <string>Start (Ctrl+S)</string>
      </property>
      <property name="statusTip">
       <string>Starts/stops the video feed from camera...</string>
@@ -232,7 +235,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>Calibrate (Ctrl-C)</string>
+      <string>Calibrate (Ctrl+C)</string>
      </property>
      <property name="statusTip">
       <string>Starts calibration process...</string>
@@ -279,7 +282,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>Record (Ctrl-R)</string>
+      <string>Record (Ctrl+R)</string>
      </property>
      <property name="statusTip">
       <string>Record a new session...</string>
@@ -311,6 +314,25 @@
      </property>
      <property name="flat">
       <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="videoCanvas">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>320</width>
+       <height>240</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </widget>
@@ -364,5 +386,127 @@
  <resources>
   <include location="icons.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>startButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>startToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>323</x>
+     <y>327</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>371</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>calibrateButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>calibrateToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>446</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>483</x>
+     <y>368</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>recordToggled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>544</x>
+     <y>328</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>594</x>
+     <y>321</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>exitClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>aboutClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>replayButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>replayClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>185</x>
+     <y>325</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>224</x>
+     <y>369</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>heatMapButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>heatMapClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>84</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>103</x>
+     <y>369</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>aboutClicked()</slot>
+  <slot>exitClicked()</slot>
+  <slot>startToggled(bool)</slot>
+  <slot>calibrateToggled(bool)</slot>
+  <slot>recordToggled(bool)</slot>
+  <slot>replayClicked()</slot>
+  <slot>heatMapClicked()</slot>
+ </slots>
 </ui>

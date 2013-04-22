@@ -17,10 +17,24 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    // general
+    void exitClicked();
+    void aboutClicked();
+
+    // record
+    void startToggled(bool state);
+    void calibrateToggled(bool state);
+    void recordToggled(bool state);
+
+    // playback
+    void replayClicked();
+    void heatMapClicked();
+
 private:
     Ui::MainWindow* ui;
     QTimer timer;
-    VideoHandler* videoHandler;
+    VideoHandler videoHandler;
 
 
 private slots:
