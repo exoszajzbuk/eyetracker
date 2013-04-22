@@ -94,7 +94,7 @@ Point calculatePosition(Point a, Point b, Point c, Point d, Point p, int screen_
 }
 
 int capture();
-int render(char **argv);
+int render(int argc, char **argv);
 
 int main(int argc, char** argv)
 {
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
         if (str1.compare(str2) == 0)
         {
             qDebug("rendering");
-            render(argv);
+            render(argc, argv);
         }
         else
         {
@@ -123,84 +123,316 @@ int main(int argc, char** argv)
 }
 
 
-int render(char** argv)
+int render(int argc, char** argv)
 {
-    stringstream filename;
-    filename << argv[2];
-
-    ifstream infile;
-    infile.open(filename.str().c_str());
-
-    int x,y;
-    char line[255];
-    int lines = 0;
-
-    vector<Point> points;
-
-    while (infile)
-    {
-        infile >> x;
-        infile >> y;
-
-        infile.getline(line, 255);
-
-        //qDebug("%d, %d", x, y);
-        lines++;
-
-        if (lines > 4)
-        {
-            Point p;
-            p.x = x;
-            p.y = y;
-
-            points.push_back(p);
-        }
-    }
-
-    infile.close();
-
     int screen_width = 1280;
     int screen_height = 1024;
 
-    Mat displayImage = Mat(screen_height, screen_width, CV_8UC3);
+    vector<string> persons;
+    //persons.push_back("01");
+    //persons.push_back("02");
+    //persons.push_back("03");
+    //persons.push_back("04");
+    //persons.push_back("05");
+    //persons.push_back("06");
+    persons.push_back("07");
 
-    Mat testImage = imread("repin_FINAL.jpg");
-    resize(testImage, testImage, Size(), 2, 2);
 
-    Rect roi = Rect((displayImage.cols-testImage.cols)/2, (displayImage.rows-testImage.rows)/2, testImage.cols, testImage.rows);
-    Mat roiImg(displayImage, roi);
-    testImage.copyTo(roiImg);
+    vector<string> measures;
+    measures.push_back("01_szabad");
+    measures.push_back("02_anyagi");
+    measures.push_back("03_eletkor");
+    measures.push_back("04_mitcsinal");
+    measures.push_back("05_ruhak");
+    measures.push_back("06_poziciok");
+    measures.push_back("07_tavol");
 
-    namedWindow("Display", CV_WINDOW_AUTOSIZE | CV_GUI_NORMAL);
-    cvSetWindowProperty("Display", CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
+    vector<vector<vector<Point> > > allPoints;
 
-    for (unsigned int i = 0; i<points.size(); i++)
+    for (unsigned int i=0; i<persons.size(); i++)
     {
-        if (points[i].x < 0 || points[i].y < 0 || points[i].x > screen_width || points[i].y > screen_height)
+        vector<string> files;
+
+        for (unsigned int j=0; j<measures.size(); j++)
         {
-            points.erase(points.begin()+i);
-            i--;
+            files.push_back(persons[i]+"/"+measures[j]);
         }
-    }
 
-    for (unsigned int i = 0; i<points.size(); i++)
-    {
-        circle(displayImage, points[i], 2, Scalar(0,255,0), 2);
+        // points for person
+        vector<vector<Point> > personPoints;
 
-        if (i < points.size())
+        for (unsigned int i = 0; i<files.size(); i++)
         {
-            cv::line(displayImage, points[i], points[i+1], Scalar(0, 255,255), 1, 8);
+            qDebug(files[i].c_str());
+
+            stringstream filename;
+            filename << files[i] << ".txt";
+
+            ifstream infile;
+            infile.open(filename.str().c_str());
+
+            int x,y;
+            char line[255];
+            int lines = 0;
+
+            vector<Point> imgPoints;
+
+            while (infile)
+            {
+                infile >> x;
+                infile >> y;
+
+                infile.getline(line, 255);
+
+                lines++;
+
+                if (lines > 4)
+                {
+                    if (x > 0 && x < screen_width && y > 0 && y < screen_height)
+                    {
+                        Point p;
+                        p.x = x;
+                        p.y = y;
+
+                        imgPoints.push_back(p);
+                    }
+                }
+            }
+
+            personPoints.push_back(imgPoints);
+
+            infile.close();
         }
+
+        // add all points
+        allPoints.push_back(personPoints);
     }
 
-    imshow("Display", displayImage);
+    // display stuff
+    int DISPLAY_MODE = 2;
 
-    int c;
-    do
+    // MODE 0 - colored lines and points
+
+    // MODE 1 - black lines
+
+    // MODE 2 - heat map
+    int HUE_MAX = 120;
+    double MAP_TR = 0.5;
+
+
+    // for every measurement
+    for (unsigned int i = 0; i<measures.size(); i++)
     {
-        c = waitKey(1);
+        // display results
+        Mat displayImage = Mat(screen_height, screen_width, CV_8UC3);
+        //displayImage.setTo(Scalar(255,255,255));
+
+        Mat tempImage = Mat(screen_height, screen_width, CV_8UC3);
+
+        Mat accImage = Mat(screen_height, screen_width, CV_8UC3);
+
+        Mat testImage = imread("repin_FINAL.jpg");
+        resize(testImage, testImage, Size(), 2, 2);
+
+        Mat whiteImage = Mat(screen_height, screen_width, CV_8UC3);
+        whiteImage.setTo(Scalar(255,255,255));
+
+        Rect roi = Rect((displayImage.cols-testImage.cols)/2, (displayImage.rows-testImage.rows)/2, testImage.cols, testImage.rows);
+        Mat roiImg(displayImage, roi);
+        testImage.copyTo(roiImg);
+
+        int pts = 0;
+        int sumPoints = 0;
+
+        for (unsigned int j=0; j<persons.size(); j++)
+        {
+            sumPoints += allPoints[j][i].size();
+        }
+
+
+        // for every persion
+        for (unsigned int j = 0; j<persons.size(); j++)
+        {
+            // for every point
+            for (unsigned int k = 0; k<allPoints[j][i].size(); k++)
+            {
+                // point count
+                pts++;
+
+                double percent = (double)pts/(double)sumPoints*100;
+                int pc = percent;
+
+                qDebug("Processing:  %d%%", pc);
+
+                switch (DISPLAY_MODE)
+                {
+                    // ========================
+                    // colored lines and points
+                    case 0:
+                        // display line
+                        if (k < allPoints[j][i].size()-1)
+                        {
+                            cv::line(displayImage, allPoints[j][i][k], allPoints[j][i][k+1], Scalar(0, 240, 0), 1, 8);
+                        }
+
+                        // display point
+                        circle(displayImage, allPoints[j][i][k], 3, Scalar(0,0,240), 2);
+                    break;
+
+
+                    // ===========
+                    // black lines
+                    case 1:
+
+                        // display line
+                        if (k < allPoints[j][i].size()-1)
+                        {
+                            cv::line(whiteImage, allPoints[j][i][k], allPoints[j][i][k+1], Scalar(0, 0, 0), 2, 8);
+                        }
+
+
+                    break;
+
+                    // ========
+                    // heat map
+                    case 2:
+                        tempImage.setTo(Scalar(0,0,0));
+
+                        // display line
+                        if (k < allPoints[j][i].size()-1)
+                        {
+                            cv::line(tempImage, allPoints[j][i][k], allPoints[j][i][k+1], Scalar(0, 0, 255), 8, 2);
+                        }
+
+                        // accumulate results
+                        accImage = accImage + tempImage;
+                    break;
+                }
+
+
+            }
+        }
+
+        // ============
+
+        // postprocessing
+        switch (DISPLAY_MODE)
+        {
+            // white image
+            case 1:
+                GaussianBlur(whiteImage, whiteImage, Size(5,5), 1);
+
+                whiteImage.copyTo(displayImage);
+
+            break;
+
+            // heat map
+            case 2:
+
+                cvtColor(accImage, accImage, CV_BGR2GRAY);
+
+                // blur effect
+                GaussianBlur(accImage, accImage, Size(35,35), 10, 10);
+
+                // calculate maximum value
+                unsigned char max = 0;
+
+                for (int i=0; i<accImage.rows; i++)
+                {
+                    for (int j=0; j<accImage.cols; j++)
+                    {
+                        if (accImage.at<unsigned char>(i,j) > max)
+                        {
+                            max = accImage.at<unsigned char>(i,j);
+                        }
+                    }
+                }
+
+                // normalize to correct range
+                double ratio = (double)HUE_MAX/(double)max;
+                accImage *= ratio;
+
+                // invert
+                for (int i=0; i<accImage.rows; i++)
+                {
+                    for (int j=0; j<accImage.cols; j++)
+                    {
+                        unsigned char value = accImage.at<unsigned char>(i,j);
+                        //if (value != 0)
+                        //{
+                            accImage.at<unsigned char>(i,j) = HUE_MAX-value;
+                        //}
+                    }
+                }
+
+                // combine channels
+                Mat satImage = Mat(screen_height, screen_width, CV_8UC3);
+                Mat ones = Mat(screen_height, screen_width, CV_8UC3);
+
+                // create mask
+                inRange(accImage, Scalar(1,1,1), Scalar(255,255,255), ones);
+
+                // combine channels
+                Mat in[] = { accImage, ones };
+                Mat out[] = { satImage };
+                int from_to[] = { 0,0, 1,1, 1,2 };
+
+                mixChannels(in, 2, out, 1, from_to, 3);
+
+                // back to RGB color space
+                cvtColor(satImage, satImage, CV_HSV2BGR);
+
+                // refine edges
+                GaussianBlur(satImage, satImage, Size(13,13), 1);
+
+                // show saturation only
+                //satImage.copyTo(displayImage);
+
+                // show full image
+                addWeighted(displayImage, 1.0, satImage, MAP_TR, 0.0, displayImage);
+
+            break;
+        }
+
+        // ===============
+
+        // info text
+        //putText(displayImage, measures[i], Point(10,20), FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,255));
+
+        // save to file
+        string m;
+        switch (DISPLAY_MODE)
+        {
+            case 0:
+                m = "a";
+            break;
+
+            case 1:
+                m = "b";
+            break;
+
+            case 2:
+                m = "c";
+            break;
+        }
+
+        string outfile = persons[0] + "_" + m + "_" + measures[i] + ".jpg";
+
+        vector<int> params;
+        params.clear();
+        params.push_back(CV_IMWRITE_JPEG_QUALITY);
+        params.push_back(80);
+
+        imwrite(outfile, displayImage, params);
+
+        // display final result
+        //namedWindow("Display", CV_WINDOW_AUTOSIZE /*| CV_GUI_NORMAL*/);
+        //imshow("Display", displayImage);
+
+        //waitKey(0);
     }
-    while (c != 27);
+
+    qDebug("Ready.");
 
     return 0;
 }
@@ -234,7 +466,7 @@ int capture()
 
     // init frames
     Mat frame, gray, equalized, thresholded, inverted;
-    int thresh = 8;
+    int thresh = 5;
 
     // contours
     vector<vector<Point> > contours;
@@ -296,6 +528,7 @@ int capture()
     Vector<Point> displayValues;
 
     bool targetRendered = true;
+    int hits = 0;
 
     Mat testImage = imread("repin_FINAL.jpg");
     resize(testImage, testImage, Size(), 2, 2);
@@ -481,6 +714,11 @@ int capture()
             {
                 // save to display values
                 displayValues.push_back(screenPosition);
+
+                if (screenPosition.x > 0 && screenPosition.y > 0 && screenPosition.x < screen_width && screenPosition.y < screen_height)
+                {
+                    hits++;
+                }
             }
         }
 
@@ -526,7 +764,9 @@ int capture()
 
         s << " | Screen position: (" << screenPosition.x << "," << screenPosition.y << ")";
 
-        s << " | Inside position: (" << relativePercentX << "," << relativePercentY << ")";
+        //s << " | Inside position: (" << relativePercentX << "," << relativePercentY << ")";
+
+        s << " | Hits: (" << hits << ")";
 
         displayStatusBar("Original", s.str(), 1000);
 
@@ -658,7 +898,7 @@ int capture()
 
     // save display data if present
     if (displayValues.size() != 0)
-    {
+    {        
         // set filename to current date
         time_t t = time(0);
         struct tm *now = localtime(&t);
@@ -678,7 +918,7 @@ int capture()
 
         for (unsigned int i = 0; i<displayValues.size(); i++)
         {
-            outfile << displayValues[i].x << ";"
+            outfile << displayValues[i].x << " "
                     << displayValues[i].y << endl;
         }
 
