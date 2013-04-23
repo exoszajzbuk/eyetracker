@@ -23,7 +23,8 @@ MainWindow::~MainWindow()
 void MainWindow::timeout()
 {
     Mat frame = videoHandler.getFrame();
-    ui->videoCanvas->setPixmap(QPixmap::fromImage(videoHandler.convert(frame)).scaled(320, 240));
+    Point2f pos = imageProcessor.process(frame);
+    ui->videoCanvas->setPixmap(QPixmap::fromImage(videoHandler.convert(imageProcessor.getPupil())).scaled(320, 240));
 }
 
 // ----------------------------------------------------------------------------
@@ -49,7 +50,7 @@ void MainWindow::startToggled(bool state)
 
         // switching the video ON
         qDebug("video: ON");
-        videoHandler.startVideo(1);
+        videoHandler.start(1);
         timer.start(100);
         ui->videoCanvas->setHidden(false);
     }
@@ -65,7 +66,7 @@ void MainWindow::startToggled(bool state)
         qDebug("video: OFF");
         ui->videoCanvas->setHidden(true);
         timer.stop();
-        videoHandler.stopVideo();
+        videoHandler.stop();
     }
 
     return;

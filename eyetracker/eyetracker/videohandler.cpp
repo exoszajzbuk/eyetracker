@@ -7,7 +7,7 @@ VideoHandler::VideoHandler()
 
 }
 
-void VideoHandler::startVideo(int cameraIdx)
+void VideoHandler::start(int cameraIdx)
 {
     cap.open(cameraIdx);
     cap.set(CV_CAP_PROP_FRAME_WIDTH, 640);
@@ -27,12 +27,12 @@ void VideoHandler::startVideo(int cameraIdx)
     }
 }
 
-void VideoHandler::stopVideo()
+void VideoHandler::stop()
 {
     //cap.release();
 }
 
-Mat VideoHandler::getFrame()
+const Mat& VideoHandler::getFrame()
 {
     cap >> frame;
     return frame;

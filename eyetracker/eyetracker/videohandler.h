@@ -11,11 +11,11 @@ class VideoHandler
 public:
     VideoHandler();
 
-    void startVideo(int cameraIdx);
-    void stopVideo();
+    void start(int cameraIdx);
+    void stop();
 
-    Mat getFrame();
-    QImage convert(const Mat& mat);
+    const Mat &getFrame();
+    QImage convert(const Mat&);
 
 private:
     VideoCapture cap;

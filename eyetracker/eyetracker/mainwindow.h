@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include "videohandler.h"
+#include "imageprocessor.h"
 
 namespace Ui {
 class MainWindow;
@@ -35,7 +36,7 @@ private:
     Ui::MainWindow* ui;
     QTimer timer;
     VideoHandler videoHandler;
-
+    ImageProcessor imageProcessor;
 
 private slots:
     void timeout();
