@@ -185,7 +185,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>Start (Ctrl+S)</string>
+      <string>Start (S)</string>
      </property>
      <property name="statusTip">
       <string>Starts/stops the video feed from camera...</string>
@@ -207,7 +207,7 @@
       </size>
      </property>
      <property name="shortcut">
-      <string>Ctrl+S</string>
+      <string>S</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -235,7 +235,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>Calibrate (Ctrl+C)</string>
+      <string>Calibrate (C)</string>
      </property>
      <property name="statusTip">
       <string>Starts calibration process...</string>
@@ -257,7 +257,7 @@
       </size>
      </property>
      <property name="shortcut">
-      <string>Ctrl+C</string>
+      <string>C</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -282,7 +282,7 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>Record (Ctrl+R)</string>
+      <string>Record (R)</string>
      </property>
      <property name="statusTip">
       <string>Record a new session...</string>
@@ -304,7 +304,7 @@
       </size>
      </property>
      <property name="shortcut">
-      <string>Ctrl+R</string>
+      <string>R</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -344,6 +344,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgba(255, 255, 255, 128);</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -356,8 +359,17 @@
         <height>17</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>Show equalized image (1)</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+      </property>
       <property name="text">
        <string>Equalized</string>
+      </property>
+      <property name="shortcut">
+       <string>1</string>
       </property>
      </widget>
      <widget class="QRadioButton" name="thresholdedButton">
@@ -369,8 +381,17 @@
         <height>17</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>Show thresholded image (2)</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+      </property>
       <property name="text">
        <string>Thresholded</string>
+      </property>
+      <property name="shortcut">
+       <string>2</string>
       </property>
      </widget>
      <widget class="QRadioButton" name="blobsButton">
@@ -382,8 +403,17 @@
         <height>17</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>Show BLOBs (3)</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+      </property>
       <property name="text">
        <string>BLOBs</string>
+      </property>
+      <property name="shortcut">
+       <string>3</string>
       </property>
      </widget>
      <widget class="QRadioButton" name="pupilButton">
@@ -395,8 +425,17 @@
         <height>17</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>Show detected pupil (4)</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+      </property>
       <property name="text">
        <string>Pupil</string>
+      </property>
+      <property name="shortcut">
+       <string>4</string>
       </property>
      </widget>
     </widget>
@@ -564,6 +603,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>equalizedButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>equalizedClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>313</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>308</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>thresholdedButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>thresholdedClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>380</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>385</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pupilButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>pupilClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>523</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>595</x>
+     <y>64</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>blobsButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>blobsClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>480</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>515</x>
+     <y>27</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>aboutClicked()</slot>
@@ -573,5 +676,9 @@
   <slot>recordToggled(bool)</slot>
   <slot>replayClicked()</slot>
   <slot>heatMapClicked()</slot>
+  <slot>equalizedClicked()</slot>
+  <slot>thresholdedClicked()</slot>
+  <slot>blobsClicked()</slot>
+  <slot>pupilClicked()</slot>
  </slots>
 </ui>

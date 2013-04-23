@@ -13,12 +13,20 @@ public:
     ~ImageProcessor();
     Point2f process(const Mat &);
 
-    Mat& getEqualized();
-    Mat& getThresholded();
-    Mat& getBlobs();
-    Mat& getPupil();
+    enum DisplayMode
+    {
+        Equalized,
+        Thresholded,
+        Blobs,
+        Pupil
+    };
+
+    void setDisplayMode(DisplayMode);
+    Mat& getDisplayImage();
 
 private:
+    DisplayMode displayMode;
+
     static bool sortByCircularityPredicate(vector<double>, vector<double>);
     bool pupilFound(RotatedRect);
 

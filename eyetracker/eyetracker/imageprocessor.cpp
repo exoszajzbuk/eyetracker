@@ -13,6 +13,8 @@ ImageProcessor::ImageProcessor()
     errors = 0;
 
     initRect = RotatedRect(Point(320,240), Size(100,100), 0);
+
+    displayMode = Pupil;
 }
 
 ImageProcessor::~ImageProcessor()
@@ -22,7 +24,7 @@ ImageProcessor::~ImageProcessor()
 
 Point2f ImageProcessor::process(const Mat& frame)
 {
-    qDebug("processing");
+    //qDebug("processing");
 
     // process frame
     flip(frame, flipped, 0);
@@ -165,24 +167,35 @@ Point2f ImageProcessor::process(const Mat& frame)
     return eyePosition.center;
 }
 
-Mat& ImageProcessor::getEqualized()
+void ImageProcessor::setDisplayMode(DisplayMode mode)
 {
-    return equalized;
+    displayMode = mode;
 }
 
-Mat& ImageProcessor::getThresholded()
+Mat& ImageProcessor::getDisplayImage()
 {
-    return thresholded;
-}
+    switch (displayMode)
+    {
+    case Equalized:
+        return equalized;
+        break;
 
-Mat& ImageProcessor::getBlobs()
-{
-    return blobs;
-}
+    case Thresholded:
+        return thresholded;
+        break;
 
-Mat& ImageProcessor::getPupil()
-{
-    return flipped;
+    case Blobs:
+        return blobs;
+        break;
+
+    case Pupil:
+        return flipped;
+        break;
+
+    default:
+        return flipped;
+        break;
+    }
 }
 
 bool ImageProcessor::pupilFound(RotatedRect p_rect)

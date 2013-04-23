@@ -10,6 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->displayGroup->setHidden(true);
+    ui->pupilButton->setChecked(true);
+    imageProcessor.setDisplayMode(ImageProcessor::Pupil);
 
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -24,7 +27,7 @@ void MainWindow::timeout()
 {
     Mat frame = videoHandler.getFrame();
     Point2f pos = imageProcessor.process(frame);
-    ui->videoCanvas->setPixmap(QPixmap::fromImage(videoHandler.convert(imageProcessor.getPupil())).scaled(320, 240));
+    ui->videoCanvas->setPixmap(QPixmap::fromImage(videoHandler.convert(imageProcessor.getDisplayImage())).scaled(320, 240));
 }
 
 // ----------------------------------------------------------------------------
@@ -53,6 +56,9 @@ void MainWindow::startToggled(bool state)
         videoHandler.start(1);
         timer.start(100);
         ui->videoCanvas->setHidden(false);
+        ui->displayGroup->setHidden(false);
+        ui->pupilButton->setChecked(true);
+        imageProcessor.setDisplayMode(ImageProcessor::Pupil);
     }
     else
     {
@@ -65,6 +71,7 @@ void MainWindow::startToggled(bool state)
         // switching the video OFF
         qDebug("video: OFF");
         ui->videoCanvas->setHidden(true);
+        ui->displayGroup->setHidden(true);
         timer.stop();
         videoHandler.stop();
     }
@@ -121,4 +128,29 @@ void MainWindow::heatMapClicked()
     qDebug("heat map");
 
     return;
+}
+
+// ----------------------------------------------------------------------------
+void MainWindow::equalizedClicked()
+{
+    qDebug("equalized");
+    imageProcessor.setDisplayMode(ImageProcessor::Equalized);
+}
+
+void MainWindow::thresholdedClicked()
+{
+    qDebug("thresholded");
+    imageProcessor.setDisplayMode(ImageProcessor::Thresholded);
+}
+
+void MainWindow::blobsClicked()
+{
+    qDebug("blobs");
+    imageProcessor.setDisplayMode(ImageProcessor::Blobs);
+}
+
+void MainWindow::pupilClicked()
+{
+    qDebug("pupil");
+    imageProcessor.setDisplayMode(ImageProcessor::Pupil);
 }

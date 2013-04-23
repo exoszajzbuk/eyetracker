@@ -28,6 +28,12 @@ public slots:
     void calibrateToggled(bool state);
     void recordToggled(bool state);
 
+    // display
+    void equalizedClicked();
+    void thresholdedClicked();
+    void blobsClicked();
+    void pupilClicked();
+
     // playback
     void replayClicked();
     void heatMapClicked();
