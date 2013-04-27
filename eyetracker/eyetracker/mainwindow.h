@@ -5,6 +5,8 @@
 #include <QTimer>
 #include "videohandler.h"
 #include "imageprocessor.h"
+#include "calibrator.h"
+#include "calibrationwindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -40,9 +42,12 @@ public slots:
 
 private:
     Ui::MainWindow* ui;
+    CalibrationWindow* calibrationWindow;
+
     QTimer timer;
     VideoHandler videoHandler;
     ImageProcessor imageProcessor;
+    Calibrator calibrator;
 
 private slots:
     void timeout();

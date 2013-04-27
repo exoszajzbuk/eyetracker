@@ -86,6 +86,9 @@ void MainWindow::calibrateToggled(bool state)
         ui->recordButton->setEnabled(true);
 
         qDebug("calibrate: ON");
+        calibrationWindow = new CalibrationWindow();
+        calibrationWindow->setCalibrator(&calibrator);
+        calibrationWindow->showFullScreen();
     }
     else
     {

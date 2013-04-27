@@ -13,13 +13,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     videohandler.cpp \
-    imageprocessor.cpp
+    imageprocessor.cpp \
+    calibrator.cpp \
+    calibrationwindow.cpp
 
 HEADERS  += mainwindow.h \
     videohandler.h \
-    imageprocessor.h
+    imageprocessor.h \
+    calibrator.h \
+    calibrationwindow.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    calibrationwindow.ui
 
 INCLUDEPATH += D:/Programok/OpenCV-2.3.0_build/install/include
 LIBS += D:/Programok/OpenCV-2.3.0_build/install/bin/*.dll
