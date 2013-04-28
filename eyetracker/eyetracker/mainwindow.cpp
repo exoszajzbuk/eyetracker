@@ -14,6 +14,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->pupilButton->setChecked(true);
     imageProcessor.setDisplayMode(ImageProcessor::Pupil);
 
+    // local status widget
+    localStatus = new QLabel(this);
+    localStatus->setHidden(true);
+    ui->statusBar->addWidget(localStatus);
+
+    // screen status widget
+    screenStatus = new QLabel(this);
+    screenStatus->setHidden(true);
+    ui->statusBar->addWidget(screenStatus);
+
+    // timer
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
 
@@ -26,8 +37,16 @@ MainWindow::~MainWindow()
 void MainWindow::timeout()
 {
     Mat frame = videoHandler.getFrame();
-    Point2f pos = imageProcessor.process(frame);
+    Point2f localPos = imageProcessor.process(frame);
     Mat image = imageProcessor.getDisplayImage();
+
+    // screen positions
+    Point2f screenPos;
+    double relativeX;
+    double relativeY;
+
+    // draw status
+    localStatus->setText("Local - "+getPositionString(localPos));
 
     // do stuff on calibration
     switch (calibrator.getState())
@@ -36,24 +55,43 @@ void MainWindow::timeout()
     case Calibrator::Calibrating:
 
         // add position info
-        calibrator.setPosition(pos);
+        calibrator.setPosition(localPos);
 
         break;
 
     case Calibrator::Calibrated:
 
         // render quadriliteral
-        calibrator.setPosition(pos);
         image = calibrator.drawCalibrationPoly(image);
+
+        // calculate position
+        screenPos = calibrator.calculatePosition(localPos, &relativeX, &relativeY);
+
+        // status
+        screenStatus->setHidden(false);
+        screenStatus->setText("Screen - "+getPositionString(screenPos));
 
         break;
 
     default:
+        screenStatus->setHidden(true);
         break;
     }
 
-    // set vide
+    // set video
     ui->videoCanvas->setPixmap(QPixmap::fromImage(videoHandler.convert(image)).scaled(320, 240));
+}
+
+QString MainWindow::getPositionString(Point pos)
+{
+    if (pos.x == -1 && pos.y == -1)
+    {
+        return QString("CLOSED");
+    }
+    else
+    {
+        return QString("x: %1 y: %2").arg(pos.x).arg(pos.y);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -85,6 +123,7 @@ void MainWindow::startToggled(bool state)
         ui->displayGroup->setHidden(false);
         ui->pupilButton->setChecked(true);
         imageProcessor.setDisplayMode(ImageProcessor::Pupil);
+        localStatus->setHidden(false);
     }
     else
     {
@@ -100,6 +139,7 @@ void MainWindow::startToggled(bool state)
         ui->displayGroup->setHidden(true);
         timer.stop();
         videoHandler.stop();
+        localStatus->setHidden(true);
     }
 
     return;

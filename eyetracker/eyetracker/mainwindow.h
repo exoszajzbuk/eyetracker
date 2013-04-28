@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 #include <QTimer>
 #include "videohandler.h"
 #include "imageprocessor.h"
@@ -40,7 +41,12 @@ public slots:
     void heatMapClicked();
 
 private:
+    QString getPositionString(Point);
+
     Ui::MainWindow* ui;
+
+    QLabel* localStatus;
+    QLabel* screenStatus;
 
     QTimer timer;
     VideoHandler videoHandler;

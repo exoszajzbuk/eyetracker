@@ -119,16 +119,31 @@ Point Calibrator::calculatePosition(Point p_position, double* relativePercentX, 
 }
 
 Mat& Calibrator::drawCalibrationPoly(Mat &frame)
-{
-    qDebug("draw poly");
+{    
+    // draw Eye region
+    Scalar yellow(0,255,255);
+    Point a = values[0];
+    Point b = values[1];
+    Point c = values[2];
+    Point d = values[3];
+
+    line(frame, a, b, yellow, 2, 8);
+    line(frame, b, c, yellow, 2, 8);
+    line(frame, c, d, yellow, 2, 8);
+    line(frame, d, a, yellow, 2, 8);
+
     return frame;
 }
 
 void Calibrator::foundCalibrationPoint()
 {
-    qDebug("found point");
+    // save current
+    values.push_back(position);
+
+    // determine if finished
     if (index < points.size()-1)
     {
+        // show next
         index++;
         showCalibrationPoint(index);
     }
