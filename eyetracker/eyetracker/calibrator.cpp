@@ -1,11 +1,59 @@
 #include "calibrator.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QDebug>
+
 Calibrator::Calibrator()
 {
+    state = None;
 }
 
-Point Calibrator::calculatePosition(Point a, Point b, Point c, Point d, Point p, int screen_width, int screen_height, int calibPadding, double* relativePercentX, double* relativePercentY)
+void Calibrator::startCalibrating()
 {
+    qDebug("start calibrating");
+
+    // create window
+    calibrationWindow = new CalibrationWindow();
+    //calibrationWindow->setCalibrator(&calibrator);
+    QRect primary = QApplication::desktop()->screenGeometry(1);
+    calibrationWindow->move(primary.center());
+    calibrationWindow->showFullScreen();
+
+    calibrationPoints.clear();
+
+    // enable calibrating
+    state = Calibrating;
+}
+
+void Calibrator::dismissCalibration()
+{
+    qDebug("dismiss calibration");
+    state = None;
+}
+
+Calibrator::CalibratorState Calibrator::getState()
+{
+    return state;
+}
+
+void Calibrator::setPosition(Point2f p_position)
+{
+    position = p_position;
+}
+
+Point Calibrator::calculatePosition(Point p_position, int screen_width, int screen_height, int calibPadding, double* relativePercentX, double* relativePercentY)
+{
+    // save position
+    setPosition(p_position);
+
+    Point a = calibrationPoints[0];
+    Point b = calibrationPoints[1];
+    Point c = calibrationPoints[2];
+    Point d = calibrationPoints[3];
+
+    Point p = position;
+
     double C = (double)(a.y - p.y) * (d.x - p.x) - (double)(a.x - p.x) * (d.y - p.y);
     double B = (double)(a.y - p.y) * (c.x - d.x) + (double)(b.y - a.y) * (d.x - p.x) - (double)(a.x - p.x) * (c.y - d.y) - (double)(b.x - a.x) * (d.y - p.y);
     double A = (double)(b.y - a.y) * (c.x - d.x) - (double)(b.x - a.x) * (c.y - d.y);
@@ -45,3 +93,10 @@ Point Calibrator::calculatePosition(Point a, Point b, Point c, Point d, Point p,
 
     return ret;
 }
+
+Mat& Calibrator::drawCalibration(Mat &frame)
+{
+    return frame;
+}
+
+

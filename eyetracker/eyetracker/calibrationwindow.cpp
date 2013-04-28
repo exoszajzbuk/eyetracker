@@ -1,6 +1,8 @@
 #include "calibrationwindow.h"
 #include "ui_calibrationwindow.h"
 
+#include <QDebug>
+
 CalibrationWindow::CalibrationWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CalibrationWindow)
@@ -13,7 +15,7 @@ CalibrationWindow::~CalibrationWindow()
     delete ui;
 }
 
-void CalibrationWindow::setCalibrator(Calibrator *p_calibrator)
+void CalibrationWindow::targetClicked()
 {
-    calibrator = p_calibrator;
+    qDebug("target clicked");
 }

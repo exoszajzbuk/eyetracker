@@ -27,7 +27,33 @@ void MainWindow::timeout()
 {
     Mat frame = videoHandler.getFrame();
     Point2f pos = imageProcessor.process(frame);
-    ui->videoCanvas->setPixmap(QPixmap::fromImage(videoHandler.convert(imageProcessor.getDisplayImage())).scaled(320, 240));
+    Mat image = imageProcessor.getDisplayImage();
+
+    // do stuff on calibration
+    switch (calibrator.getState())
+    {
+    // while calibrating
+    case Calibrator::Calibrating:
+
+        // add position info
+        calibrator.setPosition(pos);
+
+        break;
+
+    case Calibrator::Calibrated:
+
+        // render quadriliteral
+        calibrator.setPosition(pos);
+        image = calibrator.drawCalibration(image);
+
+        break;
+
+    default:
+        break;
+    }
+
+    // set vide
+    ui->videoCanvas->setPixmap(QPixmap::fromImage(videoHandler.convert(image)).scaled(320, 240));
 }
 
 // ----------------------------------------------------------------------------
@@ -86,9 +112,7 @@ void MainWindow::calibrateToggled(bool state)
         ui->recordButton->setEnabled(true);
 
         qDebug("calibrate: ON");
-        calibrationWindow = new CalibrationWindow();
-        calibrationWindow->setCalibrator(&calibrator);
-        calibrationWindow->showFullScreen();
+        calibrator.startCalibrating();
     }
     else
     {
@@ -99,6 +123,9 @@ void MainWindow::calibrateToggled(bool state)
         ui->recordButton->setEnabled(false);
 
         qDebug("calibrate: OFF");
+
+        // disable calibrating
+        calibrator.dismissCalibration();
     }
 
     return;

@@ -15,16 +15,19 @@ SOURCES += main.cpp\
     videohandler.cpp \
     imageprocessor.cpp \
     calibrator.cpp \
-    calibrationwindow.cpp
+    calibrationwindow.cpp \
+    sessionitemwidget.cpp
 
 HEADERS  += mainwindow.h \
     videohandler.h \
     imageprocessor.h \
     calibrator.h \
-    calibrationwindow.h
+    calibrationwindow.h \
+    sessionitemwidget.h
 
 FORMS    += mainwindow.ui \
-    calibrationwindow.ui
+    calibrationwindow.ui \
+    sessionitemwidget.ui
 
 INCLUDEPATH += D:/Programok/OpenCV-2.3.0_build/install/include
 LIBS += D:/Programok/OpenCV-2.3.0_build/install/bin/*.dll
