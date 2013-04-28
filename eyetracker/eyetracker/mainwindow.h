@@ -7,6 +7,7 @@
 #include "videohandler.h"
 #include "imageprocessor.h"
 #include "calibrator.h"
+#include "recorder.h"
 
 namespace Ui {
 class MainWindow;
@@ -52,6 +53,7 @@ private:
     VideoHandler videoHandler;
     ImageProcessor imageProcessor;
     Calibrator calibrator;
+    Recorder recorder;
 
 private slots:
     void timeout();

@@ -176,10 +176,12 @@ void MainWindow::recordToggled(bool state)
     if (state)
     {
         qDebug("record: ON");
+        recorder.startRecording();
     }
     else
     {
         qDebug("record: OFF");
+        recorder.stopRecording();
     }
 
     return;

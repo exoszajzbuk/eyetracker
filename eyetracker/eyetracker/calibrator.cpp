@@ -34,10 +34,9 @@ void Calibrator::startCalibrating()
 
     // clear calibration points
     values.clear();
-    index = 0;
 
     // show next point
-    showCalibrationPoint(index);
+    showCalibrationPoint(0);
 
     // show fullscreen window
     window->showFullScreen();
@@ -49,6 +48,12 @@ void Calibrator::startCalibrating()
 void Calibrator::dismissCalibration()
 {
     qDebug("dismiss calibration");
+    if (window != NULL)
+    {
+        delete window;
+        window = NULL;
+    }
+
     state = None;
 }
 
@@ -137,21 +142,23 @@ Mat& Calibrator::drawCalibrationPoly(Mat &frame)
 
 void Calibrator::foundCalibrationPoint()
 {
-    // save current
-    values.push_back(position);
+    // save current if not illeagl
+    if (position.x != -1 && position.y != -1)
+    {
+        values.push_back(position);
+    }
 
     // determine if finished
-    if (index < points.size()-1)
+    if (values.size() < points.size())
     {
         // show next
-        index++;
-        showCalibrationPoint(index);
+        showCalibrationPoint(values.size());
     }
     else
     {
         qDebug("calibration finished");
-        window->close();
         delete window;
+        window = NULL;
 
         // set state
         state = Calibrated;

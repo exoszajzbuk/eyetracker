@@ -30,3 +30,10 @@ void CalibrationWindow::setTargetPosition(Point p)
 {
     ui->target->move(p.x, p.y);
 }
+
+// do not close
+void CalibrationWindow::reject()
+{
+    // cannot close
+    qDebug("cannot close");
+}
