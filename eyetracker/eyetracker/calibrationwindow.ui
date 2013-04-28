@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="target">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -54,7 +54,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>pushButton</sender>
+   <sender>target</sender>
    <signal>clicked()</signal>
    <receiver>CalibrationWindow</receiver>
    <slot>targetClicked()</slot>

@@ -44,7 +44,7 @@ void MainWindow::timeout()
 
         // render quadriliteral
         calibrator.setPosition(pos);
-        image = calibrator.drawCalibration(image);
+        image = calibrator.drawCalibrationPoly(image);
 
         break;
 

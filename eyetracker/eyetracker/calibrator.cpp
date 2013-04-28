@@ -7,6 +7,20 @@
 Calibrator::Calibrator()
 {
     state = None;
+    padding = 50;
+    buttonSize = 40;
+
+    // get primary screen
+    screen = QApplication::desktop()->screenGeometry(1);
+
+    // calibration points
+    points.clear();
+    int deltaNeg = padding-buttonSize/2;
+    int deltaPos = padding+buttonSize/2;
+    points.push_back(Point(deltaNeg, deltaNeg));
+    points.push_back(Point(screen.width()-deltaPos, deltaNeg));
+    points.push_back(Point(screen.width()-deltaPos, screen.height()-deltaPos));
+    points.push_back(Point(deltaNeg, screen.height()-deltaPos));
 }
 
 void Calibrator::startCalibrating()
@@ -14,13 +28,19 @@ void Calibrator::startCalibrating()
     qDebug("start calibrating");
 
     // create window
-    calibrationWindow = new CalibrationWindow();
-    //calibrationWindow->setCalibrator(&calibrator);
-    QRect primary = QApplication::desktop()->screenGeometry(1);
-    calibrationWindow->move(primary.center());
-    calibrationWindow->showFullScreen();
+    window = new CalibrationWindow();
+    window->setCalibrator(this);
+    window->move(screen.center());
 
-    calibrationPoints.clear();
+    // clear calibration points
+    values.clear();
+    index = 0;
+
+    // show next point
+    showCalibrationPoint(index);
+
+    // show fullscreen window
+    window->showFullScreen();
 
     // enable calibrating
     state = Calibrating;
@@ -42,18 +62,22 @@ void Calibrator::setPosition(Point2f p_position)
     position = p_position;
 }
 
-Point Calibrator::calculatePosition(Point p_position, int screen_width, int screen_height, int calibPadding, double* relativePercentX, double* relativePercentY)
+Point Calibrator::calculatePosition(Point p_position, double* relativePercentX, double* relativePercentY)
 {
     // save position
     setPosition(p_position);
 
-    Point a = calibrationPoints[0];
-    Point b = calibrationPoints[1];
-    Point c = calibrationPoints[2];
-    Point d = calibrationPoints[3];
-
+    // values
+    Point a = values[0];
+    Point b = values[1];
+    Point c = values[2];
+    Point d = values[3];
     Point p = position;
+    int screen_width = screen.width();
+    int screen_height = screen.height();
+    int calibPadding = padding;
 
+    // calculate
     double C = (double)(a.y - p.y) * (d.x - p.x) - (double)(a.x - p.x) * (d.y - p.y);
     double B = (double)(a.y - p.y) * (c.x - d.x) + (double)(b.y - a.y) * (d.x - p.x) - (double)(a.x - p.x) * (c.y - d.y) - (double)(b.x - a.x) * (d.y - p.y);
     double A = (double)(b.y - a.y) * (c.x - d.x) - (double)(b.x - a.x) * (c.y - d.y);
@@ -94,9 +118,32 @@ Point Calibrator::calculatePosition(Point p_position, int screen_width, int scre
     return ret;
 }
 
-Mat& Calibrator::drawCalibration(Mat &frame)
+Mat& Calibrator::drawCalibrationPoly(Mat &frame)
 {
+    qDebug("draw poly");
     return frame;
 }
 
+void Calibrator::foundCalibrationPoint()
+{
+    qDebug("found point");
+    if (index < points.size()-1)
+    {
+        index++;
+        showCalibrationPoint(index);
+    }
+    else
+    {
+        qDebug("calibration finished");
+        window->close();
+        delete window;
 
+        // set state
+        state = Calibrated;
+    }
+}
+
+void Calibrator::showCalibrationPoint(int p_index)
+{
+    window->setTargetPosition(points[p_index]);
+}

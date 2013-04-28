@@ -2,11 +2,16 @@
 #define CALIBRATIONWINDOW_H
 
 #include <QDialog>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
 
 namespace Ui
 {
 class CalibrationWindow;
 }
+
+class Calibrator;
 
 class CalibrationWindow : public QDialog
 {
@@ -15,12 +20,16 @@ class CalibrationWindow : public QDialog
 public:
     explicit CalibrationWindow(QWidget *parent = 0);
     ~CalibrationWindow();
+    void setCalibrator(Calibrator*);
+    void setTargetPosition(Point p);
 
 public slots:
     void targetClicked();
 
 private:
     Ui::CalibrationWindow *ui;
+    Calibrator* calibrator;
+
 };
 
 #endif // CALIBRATIONWINDOW_H

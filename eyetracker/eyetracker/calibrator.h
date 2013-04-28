@@ -27,14 +27,28 @@ public:
     void setPosition(Point2f);
 
     // public interface
-    Point calculatePosition(Point position, int screen_width, int screen_height, int calibPadding, double* relativePercentX, double* relativePercentY);
-    Mat& drawCalibration(Mat &);
+    void foundCalibrationPoint();
+
+    // calculations
+    Point calculatePosition(Point position, double* relativePercentX, double* relativePercentY);
+    Mat& drawCalibrationPoly(Mat &);
 
 private:
     CalibratorState state;
-    CalibrationWindow* calibrationWindow;
+    CalibrationWindow* window;
+
+    void showCalibrationPoint(int);
+
+    QRect screen;
+
     Point2f position;
-    vector<Point> calibrationPoints;
+    int padding;
+    int buttonSize;
+
+    vector<Point> points;
+    vector<Point> values;
+
+    int index;
 };
 
 #endif // CALIBRATOR_H

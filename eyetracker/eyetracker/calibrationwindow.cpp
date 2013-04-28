@@ -1,5 +1,6 @@
 #include "calibrationwindow.h"
 #include "ui_calibrationwindow.h"
+#include "calibrator.h"
 
 #include <QDebug>
 
@@ -15,7 +16,17 @@ CalibrationWindow::~CalibrationWindow()
     delete ui;
 }
 
+void CalibrationWindow::setCalibrator(Calibrator* p_calibrator)
+{
+    calibrator = p_calibrator;
+}
+
 void CalibrationWindow::targetClicked()
 {
-    qDebug("target clicked");
+    calibrator->foundCalibrationPoint();
+}
+
+void CalibrationWindow::setTargetPosition(Point p)
+{
+    ui->target->move(p.x, p.y);
 }
