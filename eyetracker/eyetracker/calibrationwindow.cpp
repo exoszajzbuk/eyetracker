@@ -3,6 +3,7 @@
 #include "calibrator.h"
 
 #include <QDebug>
+#include "mainwindow.h"
 
 CalibrationWindow::CalibrationWindow(QWidget *parent) :
     QDialog(parent),
@@ -34,6 +35,6 @@ void CalibrationWindow::setTargetPosition(Point p)
 // do not close
 void CalibrationWindow::reject()
 {
-    // cannot close
-    qDebug("cannot close");
+    qDebug("reject calibration");
+    calibrator->getMainWindow()->calibrateToggled(false);
 }

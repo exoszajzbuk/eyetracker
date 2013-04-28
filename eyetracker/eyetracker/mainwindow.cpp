@@ -10,19 +10,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // custom states
     ui->displayGroup->setHidden(true);
     ui->pupilButton->setChecked(true);
     imageProcessor.setDisplayMode(ImageProcessor::Pupil);
 
+    // links
+    calibrator.setMainWindow(this);
+    recorder.setMainWindow(this);
+
     // local status widget
     localStatus = new QLabel(this);
     localStatus->setHidden(true);
-    ui->statusBar->addWidget(localStatus);
+    ui->statusBar->addPermanentWidget(localStatus);
 
     // screen status widget
     screenStatus = new QLabel(this);
     screenStatus->setHidden(true);
-    ui->statusBar->addWidget(screenStatus);
+    ui->statusBar->addPermanentWidget(screenStatus);
 
     // timer
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
@@ -46,7 +52,7 @@ void MainWindow::timeout()
     double relativeY;
 
     // draw status
-    localStatus->setText("Local - "+getPositionString(localPos));
+    localStatus->setText("Local - "+calibrator.getPositionString(localPos, localPos));
 
     // do stuff on calibration
     switch (calibrator.getState())
@@ -69,7 +75,7 @@ void MainWindow::timeout()
 
         // status
         screenStatus->setHidden(false);
-        screenStatus->setText("Screen - "+getPositionString(screenPos));
+        screenStatus->setText("Screen - "+calibrator.getPositionString(localPos, screenPos));
 
         break;
 
@@ -80,18 +86,6 @@ void MainWindow::timeout()
 
     // set video
     ui->videoCanvas->setPixmap(QPixmap::fromImage(videoHandler.convert(image)).scaled(320, 240));
-}
-
-QString MainWindow::getPositionString(Point pos)
-{
-    if (pos.x == -1 && pos.y == -1)
-    {
-        return QString("CLOSED");
-    }
-    else
-    {
-        return QString("x: %1 y: %2").arg(pos.x).arg(pos.y);
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -147,6 +141,9 @@ void MainWindow::startToggled(bool state)
 
 void MainWindow::calibrateToggled(bool state)
 {
+    // re-set state
+    ui->calibrateButton->setChecked(state);
+
     if (state)
     {
         ui->recordButton->setEnabled(true);
@@ -173,6 +170,9 @@ void MainWindow::calibrateToggled(bool state)
 
 void MainWindow::recordToggled(bool state)
 {
+    // re-set state
+    ui->recordButton->setChecked(state);
+
     if (state)
     {
         qDebug("record: ON");

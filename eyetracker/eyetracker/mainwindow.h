@@ -42,8 +42,6 @@ public slots:
     void heatMapClicked();
 
 private:
-    QString getPositionString(Point);
-
     Ui::MainWindow* ui;
 
     QLabel* localStatus;

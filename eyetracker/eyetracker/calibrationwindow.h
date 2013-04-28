@@ -19,9 +19,9 @@ class CalibrationWindow : public QDialog
     
 public:
     explicit CalibrationWindow(QWidget *parent = 0);
+    ~CalibrationWindow();
     void reject();
 
-    ~CalibrationWindow();
     void setCalibrator(Calibrator*);
     void setTargetPosition(Point p);
 

@@ -23,6 +23,16 @@ Calibrator::Calibrator()
     points.push_back(Point(deltaNeg, screen.height()-deltaPos));
 }
 
+void Calibrator::setMainWindow(MainWindow *p_mainWindow)
+{
+    mainWindow = p_mainWindow;
+}
+
+MainWindow* Calibrator::getMainWindow()
+{
+    return mainWindow;
+}
+
 void Calibrator::startCalibrating()
 {
     qDebug("start calibrating");
@@ -168,4 +178,16 @@ void Calibrator::foundCalibrationPoint()
 void Calibrator::showCalibrationPoint(int p_index)
 {
     window->setTargetPosition(points[p_index]);
+}
+
+QString Calibrator::getPositionString(Point local, Point pos)
+{
+    if (local.x == -1 && local.y == -1)
+    {
+        return QString("CLOSED");
+    }
+    else
+    {
+        return QString("%1 : %2").arg(pos.x).arg(pos.y);
+    }
 }

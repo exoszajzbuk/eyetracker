@@ -7,6 +7,8 @@ namespace Ui {
 class RecordingWindow;
 }
 
+class Recorder;
+
 class RecordingWindow : public QDialog
 {
     Q_OBJECT
@@ -14,9 +16,14 @@ class RecordingWindow : public QDialog
 public:
     explicit RecordingWindow(QWidget *parent = 0);
     ~RecordingWindow();
+    void reject();
     
+    void setRecorder(Recorder*);
+
 private:
     Ui::RecordingWindow *ui;
+    Recorder* recorder;
+
 };
 
 #endif // RECORDINGWINDOW_H

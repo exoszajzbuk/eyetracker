@@ -3,16 +3,23 @@
 
 #include "recordingwindow.h"
 
+class MainWindow;
+
 class Recorder
 {
 public:
     Recorder();
+
+    // getter/setter for mainwindow
+    void setMainWindow(MainWindow*);
+    MainWindow* getMainWindow();
 
     void startRecording();
     void stopRecording();
 
 private:
     RecordingWindow* window;
+    MainWindow* mainWindow;
 
 };
 

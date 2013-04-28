@@ -9,6 +9,8 @@
 using namespace cv;
 using namespace std;
 
+class MainWindow;
+
 class Calibrator
 {
 public:
@@ -26,15 +28,21 @@ public:
     CalibratorState getState();
     void setPosition(Point2f);
 
+    // getter/setter for mainwindow
+    void setMainWindow(MainWindow*);
+    MainWindow* getMainWindow();
+
     // public interface
     void foundCalibrationPoint();
 
     // calculations
     Point calculatePosition(Point position, double* relativePercentX, double* relativePercentY);
+    QString getPositionString(Point, Point);
     Mat& drawCalibrationPoly(Mat &);
 
 private:
     CalibratorState state;
+    MainWindow* mainWindow;
     CalibrationWindow* window;
 
     void showCalibrationPoint(int);
