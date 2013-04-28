@@ -13,17 +13,17 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QLabel" name="bgImage">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>130</y>
-     <width>110</width>
-     <height>110</height>
+     <x>40</x>
+     <y>30</y>
+     <width>351</width>
+     <height>261</height>
     </rect>
    </property>
    <property name="text">
-    <string>LOFASZ</string>
+    <string/>
    </property>
   </widget>
  </widget>

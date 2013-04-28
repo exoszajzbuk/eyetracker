@@ -9,6 +9,10 @@ RecordingWindow::RecordingWindow(QWidget *parent) :
     ui(new Ui::RecordingWindow)
 {
     ui->setupUi(this);
+
+    QPixmap sshot = QPixmap::grabWindow(QApplication::desktop()->winId());
+    ui->bgImage->setGeometry(QApplication::desktop()->screenGeometry(1));
+    ui->bgImage->setPixmap(sshot);
 }
 
 RecordingWindow::~RecordingWindow()
