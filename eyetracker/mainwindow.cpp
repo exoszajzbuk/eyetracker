@@ -30,6 +30,10 @@ MainWindow::MainWindow(QWidget *parent) :
     screenStatus->setHidden(true);
     ui->statusBar->addPermanentWidget(screenStatus);
 
+    // initial sessionlist
+    initializeSessions();
+    refreshSessionList();
+
     // timer
     connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
 }
@@ -250,4 +254,29 @@ void MainWindow::pupilClicked()
 {
     qDebug("pupil");
     imageProcessor.setDisplayMode(ImageProcessor::Pupil);
+}
+
+// ----------------------------------------------------------------------------
+void MainWindow::initializeSessions()
+{
+    qDebug("initialize session list");
+
+    vector<string> names = Session::getNames();
+
+    for (unsigned int i=0; i<names.size(); ++i)
+    {
+        Session* session = new Session();
+        session->load(names.at(i));
+        sessions.push_back(*session);
+    }
+}
+
+void MainWindow::refreshSessionList()
+{
+    qDebug("refresh session list");
+
+    for (unsigned int i=0; i<sessions.size(); ++i)
+    {
+        sessions.at(i).getStats();
+    }
 }

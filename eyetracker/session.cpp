@@ -46,7 +46,7 @@ void Session::save(string name)
     pointsFile.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&pointsFile);
 
-    for (int i=0; i<points.size(); ++i)
+    for (unsigned int i=0; i<points.size(); ++i)
     {
         out << points.at(i).x << "," << points.at(i).y << endl;
     }
@@ -54,5 +54,72 @@ void Session::save(string name)
 
 void Session::load(string name)
 {
+    string folderName = string("session_")+name;
+    string imageName = folderName+"/image.png";
+    string pointsName = folderName+"/points.txt";
 
+    // load image
+    image.load(imageName.c_str());
+
+    // load points
+    QFile pointsFile(pointsName.c_str());
+    pointsFile.open(QIODevice::ReadOnly);
+
+    QTextStream in(&pointsFile);
+    QString line = in.readLine();
+    while (!line.isNull()) {
+        string lineStr = line.toLocal8Bit().constData();
+        //cout << lineStr << endl;
+
+        std::vector<std::string> coords;
+        istringstream f(lineStr);
+        string s;
+        while (getline(f,s,','))
+        {
+            //std::cout << s << std::endl;
+            coords.push_back(s);
+        }
+
+        Point2f p(atoi(coords.at(0).c_str()), atoi(coords.at(1).c_str()));
+        addPoint(p);
+
+        line = in.readLine();
+    }
+}
+
+// read session names
+vector<string> Session::getNames()
+{
+    vector<string> names;
+    string prefix = "session_";
+
+    QDir base = QDir();
+    base.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+    base.setSorting(QDir::Name);
+
+    QStringList dirs = base.entryList();
+
+    for (int i = 0; i < dirs.size(); ++i)
+    {
+        string dir = dirs.at(i).toLocal8Bit().constData();
+
+        // if dire has the right prefix
+        if (dir.compare(0,8,prefix) == 0)
+        {
+            string name = dir.substr(8, string::npos);
+            names.push_back(name);
+        }
+    }
+
+    return names;
+}
+
+void Session::getStats()
+{
+    cout << "points: " << points.size() << endl;
+    for (unsigned int i=0; i<points.size(); ++i)
+    {
+        cout << points.at(i) << endl;
+    }
+    cout << "image: " << image.width() << "," << image.height() << endl;
 }

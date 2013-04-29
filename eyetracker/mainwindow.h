@@ -8,6 +8,7 @@
 #include "imageprocessor.h"
 #include "calibrator.h"
 #include "recorder.h"
+#include "session.h"
 
 namespace Ui {
 class MainWindow;
@@ -44,6 +45,9 @@ public slots:
     void replayClicked();
     void heatMapClicked();
 
+    // sessions
+    void refreshSessionList();
+
 private:
     Ui::MainWindow* ui;
 
@@ -55,6 +59,9 @@ private:
     ImageProcessor imageProcessor;
     Calibrator calibrator;
     Recorder recorder;
+
+    void initializeSessions();
+    vector<Session> sessions;
 
 private slots:
     void timeout();

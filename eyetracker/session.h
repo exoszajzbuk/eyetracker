@@ -19,6 +19,11 @@ public:
     void save(string name);
     void load(string name);
 
+    void getStats();
+
+    // static for sessio names
+    static vector<string> getNames();
+
 private:
     QPixmap image;
     vector<Point> points;
