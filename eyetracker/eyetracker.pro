@@ -18,7 +18,9 @@ SOURCES += main.cpp\
     calibrationwindow.cpp \
     sessionitemwidget.cpp \
     recorder.cpp \
-    recordingwindow.cpp
+    recordingwindow.cpp \
+    session.cpp \
+    helper.cpp
 
 HEADERS  += mainwindow.h \
     videohandler.h \
@@ -27,7 +29,9 @@ HEADERS  += mainwindow.h \
     calibrationwindow.h \
     sessionitemwidget.h \
     recorder.h \
-    recordingwindow.h
+    recordingwindow.h \
+    session.h \
+    helper.h
 
 FORMS    += mainwindow.ui \
     calibrationwindow.ui \

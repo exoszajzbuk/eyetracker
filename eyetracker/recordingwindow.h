@@ -18,11 +18,14 @@ public:
     ~RecordingWindow();
     void reject();
     
+    QPixmap getImage();
     void setRecorder(Recorder*);
 
 private:
     Ui::RecordingWindow *ui;
     Recorder* recorder;
+
+    QPixmap image;
 
 };
 

@@ -36,5 +36,5 @@ void CalibrationWindow::setTargetPosition(Point p)
 void CalibrationWindow::reject()
 {
     qDebug("reject calibration");
-    calibrator->getMainWindow()->calibrateToggled(false);
+    calibrator->getMainWindow()->toggleCalibrate(false);
 }

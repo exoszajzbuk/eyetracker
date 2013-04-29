@@ -54,7 +54,8 @@ void MainWindow::timeout()
     // draw status
     localStatus->setText("Local - "+calibrator.getPositionString(localPos, localPos));
 
-    // do stuff on calibration
+    // ------------------
+    // CALIBRATION STATES
     switch (calibrator.getState())
     {
     // while calibrating
@@ -81,6 +82,20 @@ void MainWindow::timeout()
 
     default:
         screenStatus->setHidden(true);
+        break;
+    }
+
+    // ----------------
+    // RECORDING STATES
+    switch (recorder.getState())
+    {
+    // while recording
+    case Recorder::Recording:
+        recorder.recordPoint(screenPos);
+        break;
+
+    default:
+        // do nothing
         break;
     }
 
@@ -142,7 +157,7 @@ void MainWindow::startToggled(bool state)
 void MainWindow::calibrateToggled(bool state)
 {
     // re-set state
-    ui->calibrateButton->setChecked(state);
+    //ui->calibrateButton->setChecked(state);
 
     if (state)
     {
@@ -171,7 +186,7 @@ void MainWindow::calibrateToggled(bool state)
 void MainWindow::recordToggled(bool state)
 {
     // re-set state
-    ui->recordButton->setChecked(state);
+    //ui->recordButton->setChecked(state);
 
     if (state)
     {
@@ -185,6 +200,16 @@ void MainWindow::recordToggled(bool state)
     }
 
     return;
+}
+
+void MainWindow::toggleCalibrate(bool state)
+{
+    ui->calibrateButton->setChecked(state);
+}
+
+void MainWindow::toggleRecord(bool state)
+{
+    ui->recordButton->setChecked(state);
 }
 
 // ----------------------------------------------------------------------------

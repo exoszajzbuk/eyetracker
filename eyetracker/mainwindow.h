@@ -31,6 +31,9 @@ public slots:
     void calibrateToggled(bool state);
     void recordToggled(bool state);
 
+    void toggleCalibrate(bool state);
+    void toggleRecord(bool state);
+
     // display
     void equalizedClicked();
     void thresholdedClicked();
