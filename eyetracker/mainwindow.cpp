@@ -3,6 +3,7 @@
 #include "sessionitemwidget.h"
 
 #include <QDebug>
+#include <QMessageBox>
 
 #include <opencv2/opencv.hpp>
 
@@ -278,9 +279,27 @@ void MainWindow::deleteClicked()
     qDebug("delete");
     int index = ui->listWidget->selectionModel()->selectedIndexes().at(0).row();
 
-    Session::remove(sessions.at(index).getName());
+    QMessageBox confirm;
+    confirm.setWindowTitle("Confirm delete");
+    confirm.setText("Are you sure you want to delete this session?");
+    confirm.addButton(QMessageBox::Ok);
+    confirm.addButton(QMessageBox::Cancel);
+    confirm.setIcon(QMessageBox::Warning);
 
-    refreshSessionList();
+    switch(confirm.exec())
+    {
+    case QMessageBox::Ok:
+        Session::remove(sessions.at(index).getName());
+        refreshSessionList();
+        break;
+
+    case QMessageBox::Cancel:
+    default:
+        // do nothing
+        break;
+    }
+
+
 }
 
 // ----------------------------------------------------------------------------
