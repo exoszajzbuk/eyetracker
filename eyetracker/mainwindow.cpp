@@ -252,17 +252,28 @@ void MainWindow::toggleRecord(bool state)
 // ----------------------------------------------------------------------------
 void MainWindow::listItemSelected()
 {
-    ui->playButton->setEnabled(true);
-    ui->heatMapButton->setEnabled(true);
-    ui->deleteButton->setEnabled(true);
+    bool state;
+    if (ui->listWidget->selectionModel()->selectedIndexes().size() == 0)
+    {
+        state = false;
+    }
+    else
+    {
+        state = true;
+    }
+
+    // set to correct state
+    ui->playButton->setEnabled(state);
+    ui->heatMapButton->setEnabled(state);
+    ui->deleteButton->setEnabled(state);
 }
 
 void MainWindow::playClicked()
 {
     qDebug("play");
+    int index = ui->listWidget->selectionModel()->selectedIndexes().at(0).row();
 
-    QModelIndexList indexes = ui->listWidget->selectionModel()->selectedIndexes();
-    cout << indexes.at(0).row() << endl;
+    cout << index << endl;
 
     return;
 }
@@ -270,6 +281,9 @@ void MainWindow::playClicked()
 void MainWindow::heatMapClicked()
 {
     qDebug("heat map");
+    int index = ui->listWidget->selectionModel()->selectedIndexes().at(0).row();
+
+    cout << index << endl;
 
     return;
 }

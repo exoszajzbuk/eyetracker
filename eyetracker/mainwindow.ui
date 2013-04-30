@@ -68,10 +68,10 @@
       </rect>
      </property>
      <property name="toolTip">
-      <string>Replay</string>
+      <string>Play</string>
      </property>
      <property name="statusTip">
-      <string>Replays the selected session...</string>
+      <string>Plays the selected session...</string>
      </property>
      <property name="autoFillBackground">
       <bool>false</bool>
@@ -159,7 +159,7 @@
       <string>Delete</string>
      </property>
      <property name="statusTip">
-      <string>Deletes selected session...</string>
+      <string>Deletes the selected session...</string>
      </property>
      <property name="autoFillBackground">
       <bool>false</bool>
