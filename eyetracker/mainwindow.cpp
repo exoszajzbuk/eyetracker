@@ -215,10 +215,13 @@ void MainWindow::recordToggled(bool state)
         {
             setWindowState( (windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
             activateWindow();
-        }
 
-        recorder.stopRecording();
-        refreshSessionList();
+            QTimer::singleShot(500, this, SLOT(stopRecording()));
+        }
+        else
+        {
+            stopRecording();
+        }
     }
 
     return;
@@ -227,6 +230,12 @@ void MainWindow::recordToggled(bool state)
 void MainWindow::startRecording()
 {
     recorder.startRecording();
+}
+
+void MainWindow::stopRecording()
+{
+    recorder.stopRecording();
+    refreshSessionList();
 }
 
 void MainWindow::toggleCalibrate(bool state)
