@@ -278,7 +278,9 @@ void MainWindow::deleteClicked()
     qDebug("delete");
     int index = ui->listWidget->selectionModel()->selectedIndexes().at(0).row();
 
-    cout << index << endl;
+    Session::remove(sessions.at(index).getName());
+
+    refreshSessionList();
 }
 
 // ----------------------------------------------------------------------------

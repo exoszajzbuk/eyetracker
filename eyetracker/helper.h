@@ -1,6 +1,9 @@
 #ifndef HELPER_H
 #define HELPER_H
 
+#include <QString>
+#include <QDir>
+
 #include <ctime>
 #include <opencv2/opencv.hpp>
 
@@ -13,7 +16,6 @@ public:
 
     static string timeToTimestamp(time_t t);
     static string timestampToFormatted(string t);
-
 };
 
 #endif // HELPER_H

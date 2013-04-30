@@ -1,4 +1,5 @@
 #include "session.h"
+#include "helper.h"
 
 #include <iostream>
 #include <QDebug>
@@ -116,6 +117,17 @@ vector<string> Session::getNames()
     // reverse order
     reverse(names.begin(), names.end());
     return names;
+}
+
+void Session::remove(string name)
+{
+    string folderName = string("session_")+name;
+    string imageName = folderName+"/image.png";
+    string pointsName = folderName+"/points.txt";
+
+    QFile::remove(QString(imageName.c_str()));
+    QFile::remove(QString(pointsName.c_str()));
+    QDir().rmdir(QString(folderName.c_str()));
 }
 
 string Session::getName() const

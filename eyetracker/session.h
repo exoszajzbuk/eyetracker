@@ -23,8 +23,8 @@ public:
     QPixmap getImage() const;
     vector<Point> getPoints() const;
 
-    // static for sessio names
     static vector<string> getNames();
+    static void remove(string);
 
 private:
     string name;
