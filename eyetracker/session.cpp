@@ -7,13 +7,11 @@
 
 Session::Session()
 {
-    qDebug("session initialized");
     points.clear();
 }
 
 Session::~Session()
 {
-    qDebug("session destroyed");
 }
 
 void Session::setImage(QPixmap i)
@@ -26,8 +24,10 @@ void Session::addPoint(Point p)
     points.push_back(p);
 }
 
-void Session::save(string name)
+void Session::save(string p_name)
 {
+    name = p_name;
+
     string folderName = string("session_")+name;
     string imageName = folderName+"/image.png";
     string pointsName = folderName+"/points.txt";
@@ -52,8 +52,10 @@ void Session::save(string name)
     }
 }
 
-void Session::load(string name)
+void Session::load(string p_name)
 {
+    name = p_name;
+
     string folderName = string("session_")+name;
     string imageName = folderName+"/image.png";
     string pointsName = folderName+"/points.txt";
@@ -111,15 +113,22 @@ vector<string> Session::getNames()
         }
     }
 
+    // reverse order
+    reverse(names.begin(), names.end());
     return names;
 }
 
-void Session::getStats()
+string Session::getName() const
 {
-    cout << "points: " << points.size() << endl;
-    for (unsigned int i=0; i<points.size(); ++i)
-    {
-        cout << points.at(i) << endl;
-    }
-    cout << "image: " << image.width() << "," << image.height() << endl;
+    return name;
+}
+
+vector<Point> Session::getPoints() const
+{
+    return points;
+}
+
+QPixmap Session::getImage() const
+{
+    return image;
 }

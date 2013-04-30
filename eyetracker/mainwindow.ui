@@ -42,7 +42,7 @@
     <property name="title">
      <string>Playback</string>
     </property>
-    <widget class="QListView" name="listView">
+    <widget class="QListWidget" name="listWidget">
      <property name="geometry">
       <rect>
        <x>10</x>

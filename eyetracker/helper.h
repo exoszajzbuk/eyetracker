@@ -11,7 +11,8 @@ class Helper
 public:
     Helper();
 
-    static string timestr(time_t t);
+    static string timeToTimestamp(time_t t);
+    static string timestampToFormatted(string t);
 
 };
 

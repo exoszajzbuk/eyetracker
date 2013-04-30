@@ -45,9 +45,6 @@ public slots:
     void replayClicked();
     void heatMapClicked();
 
-    // sessions
-    void refreshSessionList();
-
 private:
     Ui::MainWindow* ui;
 
@@ -60,7 +57,8 @@ private:
     Calibrator calibrator;
     Recorder recorder;
 
-    void initializeSessions();
+    void findSessions();
+    void refreshSessionList();
     vector<Session> sessions;
 
 private slots:

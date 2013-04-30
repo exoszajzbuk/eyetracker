@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "sessionitemwidget.h"
 
 #include <QDebug>
 
@@ -30,8 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     screenStatus->setHidden(true);
     ui->statusBar->addPermanentWidget(screenStatus);
 
-    // initial sessionlist
-    initializeSessions();
+    // refresh sessionlist
     refreshSessionList();
 
     // timer
@@ -201,6 +201,7 @@ void MainWindow::recordToggled(bool state)
     {
         qDebug("record: OFF");
         recorder.stopRecording();
+        refreshSessionList();
     }
 
     return;
@@ -257,9 +258,30 @@ void MainWindow::pupilClicked()
 }
 
 // ----------------------------------------------------------------------------
-void MainWindow::initializeSessions()
+void MainWindow::refreshSessionList()
 {
-    qDebug("initialize session list");
+    // initialize sessions
+    findSessions();
+
+    // clear list
+    ui->listWidget->clear();
+
+    // populate
+    for (unsigned int i=0; i<sessions.size(); ++i)
+    {
+        Session session = sessions.at(i);
+
+        SessionItemWidget *sessionItem = new SessionItemWidget(session);
+        QListWidgetItem *listItem = new QListWidgetItem();
+        listItem->setSizeHint(QSize(210,50));
+        ui->listWidget->addItem(listItem);
+        ui->listWidget->setItemWidget(listItem, sessionItem);
+    }
+}
+
+void MainWindow::findSessions()
+{
+    sessions.clear();
 
     vector<string> names = Session::getNames();
 
@@ -268,15 +290,5 @@ void MainWindow::initializeSessions()
         Session* session = new Session();
         session->load(names.at(i));
         sessions.push_back(*session);
-    }
-}
-
-void MainWindow::refreshSessionList()
-{
-    qDebug("refresh session list");
-
-    for (unsigned int i=0; i<sessions.size(); ++i)
-    {
-        sessions.at(i).getStats();
     }
 }

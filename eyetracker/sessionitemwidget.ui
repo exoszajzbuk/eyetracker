@@ -13,17 +13,49 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="name">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>0</y>
+     <x>70</x>
+     <y>5</y>
      <width>131</width>
      <height>21</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
    <property name="text">
-    <string>Session date</string>
+    <string>2013/04/30 18:00:00</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="image">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>50</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="points">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>26</y>
+     <width>131</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>123 points</string>
    </property>
   </widget>
  </widget>

@@ -56,7 +56,7 @@ void Recorder::stopRecording()
 
     // save session
     qDebug("saving session");
-    session->save(Helper::timestr(time(0)));
+    session->save(Helper::timeToTimestamp(time(0)));
 
     if (session != NULL)
     {

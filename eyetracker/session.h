@@ -16,15 +16,18 @@ public:
     void setImage(QPixmap i);
     void addPoint(Point p);
 
-    void save(string name);
-    void load(string name);
+    void save(string p_name);
+    void load(string p_name);
 
-    void getStats();
+    string getName() const;
+    QPixmap getImage() const;
+    vector<Point> getPoints() const;
 
     // static for sessio names
     static vector<string> getNames();
 
 private:
+    string name;
     QPixmap image;
     vector<Point> points;
 };
