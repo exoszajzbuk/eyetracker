@@ -55,7 +55,7 @@
       <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
     </widget>
-    <widget class="QPushButton" name="replayButton">
+    <widget class="QPushButton" name="playButton">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -77,11 +77,11 @@
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>Replay</string>
+      <string>Play</string>
      </property>
      <property name="icon">
       <iconset resource="icons.qrc">
-       <normaloff>:/icons/icons/replay.png</normaloff>:/icons/icons/replay.png</iconset>
+       <normaloff>:/icons/icons/play.png</normaloff>:/icons/icons/play.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -90,7 +90,7 @@
       </size>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="checked">
       <bool>false</bool>
@@ -134,7 +134,7 @@
       </size>
      </property>
      <property name="checkable">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="checked">
       <bool>false</bool>
@@ -198,7 +198,7 @@
      </property>
      <property name="icon">
       <iconset resource="icons.qrc">
-       <normaloff>:/icons/icons/play.png</normaloff>:/icons/icons/play.png</iconset>
+       <normaloff>:/icons/icons/webcam.png</normaloff>:/icons/icons/webcam.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -572,10 +572,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>replayButton</sender>
+   <sender>playButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>replayClicked()</slot>
+   <slot>playClicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>185</x>
@@ -667,6 +667,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>listWidget</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>listItemSelected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>71</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>154</x>
+     <y>28</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>aboutClicked()</slot>
@@ -674,11 +690,12 @@
   <slot>startToggled(bool)</slot>
   <slot>calibrateToggled(bool)</slot>
   <slot>recordToggled(bool)</slot>
-  <slot>replayClicked()</slot>
   <slot>heatMapClicked()</slot>
   <slot>equalizedClicked()</slot>
   <slot>thresholdedClicked()</slot>
   <slot>blobsClicked()</slot>
   <slot>pupilClicked()</slot>
+  <slot>playClicked()</slot>
+  <slot>listItemSelected()</slot>
  </slots>
 </ui>

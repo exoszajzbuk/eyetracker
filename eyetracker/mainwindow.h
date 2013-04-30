@@ -42,7 +42,8 @@ public slots:
     void pupilClicked();
 
     // playback
-    void replayClicked();
+    void listItemSelected();
+    void playClicked();
     void heatMapClicked();
 
 private:

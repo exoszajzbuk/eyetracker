@@ -4,9 +4,9 @@
         <file>icons/heatmap.png</file>
         <file>icons/play.png</file>
         <file>icons/record.png</file>
-        <file>icons/replay.png</file>
         <file>icons/eye.png</file>
         <file>icons/exit.png</file>
         <file>icons/about.png</file>
+        <file>icons/webcam.png</file>
     </qresource>
 </RCC>

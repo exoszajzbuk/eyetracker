@@ -218,7 +218,13 @@ void MainWindow::toggleRecord(bool state)
 }
 
 // ----------------------------------------------------------------------------
-void MainWindow::replayClicked()
+void MainWindow::listItemSelected()
+{
+    ui->playButton->setEnabled(true);
+    ui->heatMapButton->setEnabled(true);
+}
+
+void MainWindow::playClicked()
 {
     qDebug("replay");
 
