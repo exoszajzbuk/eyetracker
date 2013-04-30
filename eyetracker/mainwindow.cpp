@@ -195,16 +195,38 @@ void MainWindow::recordToggled(bool state)
     if (state)
     {
         qDebug("record: ON");
-        recorder.startRecording();
+
+        if (QApplication::desktop()->screenCount() == 1)
+        {
+            showMinimized();
+            QTimer::singleShot(1000, this, SLOT(startRecording()));
+        }
+        else
+        {
+            // start immediately
+            startRecording();
+        }
     }
     else
     {
         qDebug("record: OFF");
+
+        if (QApplication::desktop()->screenCount() == 1)
+        {
+            setWindowState( (windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+            activateWindow();
+        }
+
         recorder.stopRecording();
         refreshSessionList();
     }
 
     return;
+}
+
+void MainWindow::startRecording()
+{
+    recorder.startRecording();
 }
 
 void MainWindow::toggleCalibrate(bool state)
@@ -226,7 +248,10 @@ void MainWindow::listItemSelected()
 
 void MainWindow::playClicked()
 {
-    qDebug("replay");
+    qDebug("play");
+
+    QModelIndexList indexes = ui->listWidget->selectionModel()->selectedIndexes();
+    cout << indexes.at(0).row() << endl;
 
     return;
 }

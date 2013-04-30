@@ -64,6 +64,7 @@ private:
 
 private slots:
     void timeout();
+    void startRecording();
 
 };
 

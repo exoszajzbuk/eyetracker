@@ -11,7 +11,7 @@ SessionItemWidget::SessionItemWidget(const Session& session, QWidget *parent) :
     string name = Helper::timestampToFormatted(session.getName());
     stringstream points;
     points << session.getPoints().size() << " points";
-    QPixmap image = session.getImage().scaled(50, 30);
+    QPixmap image = session.getImage().scaled(50, 30, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     ui->name->setText(QString(name.c_str()));
     ui->points->setText(QString(points.str().c_str()));
