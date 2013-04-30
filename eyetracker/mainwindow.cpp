@@ -253,6 +253,7 @@ void MainWindow::listItemSelected()
 {
     ui->playButton->setEnabled(true);
     ui->heatMapButton->setEnabled(true);
+    ui->deleteButton->setEnabled(true);
 }
 
 void MainWindow::playClicked()
@@ -270,6 +271,14 @@ void MainWindow::heatMapClicked()
     qDebug("heat map");
 
     return;
+}
+
+void MainWindow::deleteClicked()
+{
+    qDebug("delete");
+    int index = ui->listWidget->selectionModel()->selectedIndexes().at(0).row();
+
+    cout << index << endl;
 }
 
 // ----------------------------------------------------------------------------
@@ -313,7 +322,7 @@ void MainWindow::refreshSessionList()
 
         SessionItemWidget *sessionItem = new SessionItemWidget(session);
         QListWidgetItem *listItem = new QListWidgetItem();
-        listItem->setSizeHint(QSize(210,50));
+        listItem->setSizeHint(sessionItem->size());
         ui->listWidget->addItem(listItem);
         ui->listWidget->setItemWidget(listItem, sessionItem);
     }

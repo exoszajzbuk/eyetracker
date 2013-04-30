@@ -20,7 +20,7 @@ string Helper::timestampToFormatted(string t)
 
     timeinfo = localtime(&raw_time);
 
-    strftime(buffer, 80, "%y/%m/%d %H:%M:%S", timeinfo);
+    strftime(buffer, 80, "%Y/%m/%d %H:%M:%S", timeinfo);
 
     return string(buffer);
 }

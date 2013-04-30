@@ -45,6 +45,7 @@ public slots:
     void listItemSelected();
     void playClicked();
     void heatMapClicked();
+    void deleteClicked();
 
 private:
     Ui::MainWindow* ui;

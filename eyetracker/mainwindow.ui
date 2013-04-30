@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>710</width>
     <height>390</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>600</width>
+    <width>710</width>
     <height>390</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>600</width>
+    <width>710</width>
     <height>390</height>
    </size>
   </property>
@@ -35,7 +35,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>231</width>
+      <width>341</width>
       <height>331</height>
      </rect>
     </property>
@@ -47,7 +47,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>210</width>
+       <width>320</width>
        <height>240</height>
       </rect>
      </property>
@@ -61,7 +61,7 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>10</x>
        <y>270</y>
        <width>100</width>
        <height>50</height>
@@ -105,7 +105,7 @@
      </property>
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>120</x>
        <y>270</y>
        <width>100</width>
        <height>50</height>
@@ -143,11 +143,55 @@
       <bool>false</bool>
      </property>
     </widget>
+    <widget class="QPushButton" name="deleteButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>270</y>
+       <width>100</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>Delete</string>
+     </property>
+     <property name="statusTip">
+      <string>Deletes selected session...</string>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>Delete</string>
+     </property>
+     <property name="icon">
+      <iconset resource="icons.qrc">
+       <normaloff>:/icons/icons/delete.png</normaloff>:/icons/icons/delete.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="recordGroup">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>360</x>
       <y>10</y>
       <width>341</width>
       <height>331</height>
@@ -451,7 +495,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>710</width>
      <height>21</height>
     </rect>
    </property>
@@ -498,7 +542,7 @@
    <slot>startToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>323</x>
+     <x>433</x>
      <y>327</y>
     </hint>
     <hint type="destinationlabel">
@@ -514,7 +558,7 @@
    <slot>calibrateToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>446</x>
+     <x>556</x>
      <y>320</y>
     </hint>
     <hint type="destinationlabel">
@@ -530,7 +574,7 @@
    <slot>recordToggled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>544</x>
+     <x>654</x>
      <y>328</y>
     </hint>
     <hint type="destinationlabel">
@@ -578,7 +622,7 @@
    <slot>playClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>185</x>
+     <x>75</x>
      <y>325</y>
     </hint>
     <hint type="destinationlabel">
@@ -594,7 +638,7 @@
    <slot>heatMapClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>84</x>
+     <x>194</x>
      <y>337</y>
     </hint>
     <hint type="destinationlabel">
@@ -610,7 +654,7 @@
    <slot>equalizedClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>313</x>
+     <x>423</x>
      <y>260</y>
     </hint>
     <hint type="destinationlabel">
@@ -626,7 +670,7 @@
    <slot>thresholdedClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>380</x>
+     <x>490</x>
      <y>259</y>
     </hint>
     <hint type="destinationlabel">
@@ -642,7 +686,7 @@
    <slot>pupilClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>523</x>
+     <x>633</x>
      <y>263</y>
     </hint>
     <hint type="destinationlabel">
@@ -658,7 +702,7 @@
    <slot>blobsClicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>480</x>
+     <x>590</x>
      <y>259</y>
     </hint>
     <hint type="destinationlabel">
@@ -683,6 +727,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>deleteButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>deleteClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>303</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>322</x>
+     <y>396</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>aboutClicked()</slot>
@@ -697,5 +757,6 @@
   <slot>pupilClicked()</slot>
   <slot>playClicked()</slot>
   <slot>listItemSelected()</slot>
+  <slot>deleteClicked()</slot>
  </slots>
 </ui>

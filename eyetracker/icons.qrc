@@ -8,5 +8,6 @@
         <file>icons/exit.png</file>
         <file>icons/about.png</file>
         <file>icons/webcam.png</file>
+        <file>icons/delete.png</file>
     </qresource>
 </RCC>
