@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     calibrator.setMainWindow(this);
     recorder.setMainWindow(this);
     player.setMainWindow(this);
+    heatMapper.setMainWindow(this);
 
     // local status widget
     localStatus = new QLabel(this);
@@ -285,7 +286,7 @@ void MainWindow::heatMapClicked()
     qDebug("heat map");
     int index = ui->listWidget->selectionModel()->selectedIndexes().at(0).row();
 
-    cout << index << endl;
+    heatMapper.generate(sessions.at(index));
 
     return;
 }

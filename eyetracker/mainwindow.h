@@ -9,6 +9,7 @@
 #include "calibrator.h"
 #include "recorder.h"
 #include "player.h"
+#include "heatmapper.h"
 #include "session.h"
 
 namespace Ui {
@@ -57,11 +58,15 @@ private:
     QLabel* screenStatus;
 
     QTimer processTimer;
+
     VideoHandler videoHandler;
     ImageProcessor imageProcessor;
+
     Calibrator calibrator;
     Recorder recorder;
+
     Player player;
+    Heatmapper heatMapper;
 
     void findSessions();
     void refreshSessionList();

@@ -22,7 +22,9 @@ SOURCES += main.cpp\
     session.cpp \
     helper.cpp \
     player.cpp \
-    playerwindow.cpp
+    playerwindow.cpp \
+    heatmapperwindow.cpp \
+    heatmapper.cpp
 
 HEADERS  += mainwindow.h \
     videohandler.h \
@@ -35,13 +37,16 @@ HEADERS  += mainwindow.h \
     session.h \
     helper.h \
     player.h \
-    playerwindow.h
+    playerwindow.h \
+    heatmapperwindow.h \
+    heatmapper.h
 
 FORMS    += mainwindow.ui \
     calibrationwindow.ui \
     sessionitemwidget.ui \
     recordingwindow.ui \
-    playerwindow.ui
+    playerwindow.ui \
+    heatmapperwindow.ui
 
 INCLUDEPATH += D:/Programok/OpenCV-2.3.0_build/install/include
 LIBS += D:/Programok/OpenCV-2.3.0_build/install/bin/*.dll
