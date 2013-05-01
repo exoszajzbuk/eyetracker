@@ -50,6 +50,7 @@ void Recorder::stopRecording()
 
     if (window != NULL)
     {
+        window->close();
         delete window;
         window = NULL;
     }

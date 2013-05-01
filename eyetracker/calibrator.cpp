@@ -60,6 +60,7 @@ void Calibrator::dismissCalibration()
     qDebug("dismiss calibration");
     if (window != NULL)
     {
+        window->close();
         delete window;
         window = NULL;
     }

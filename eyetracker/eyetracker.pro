@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     recorder.cpp \
     recordingwindow.cpp \
     session.cpp \
-    helper.cpp
+    helper.cpp \
+    player.cpp \
+    playerwindow.cpp
 
 HEADERS  += mainwindow.h \
     videohandler.h \
@@ -31,12 +33,15 @@ HEADERS  += mainwindow.h \
     recorder.h \
     recordingwindow.h \
     session.h \
-    helper.h
+    helper.h \
+    player.h \
+    playerwindow.h
 
 FORMS    += mainwindow.ui \
     calibrationwindow.ui \
     sessionitemwidget.ui \
-    recordingwindow.ui
+    recordingwindow.ui \
+    playerwindow.ui
 
 INCLUDEPATH += D:/Programok/OpenCV-2.3.0_build/install/include
 LIBS += D:/Programok/OpenCV-2.3.0_build/install/bin/*.dll

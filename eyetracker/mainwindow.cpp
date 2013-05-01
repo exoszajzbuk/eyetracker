@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // links
     calibrator.setMainWindow(this);
     recorder.setMainWindow(this);
+    player.setMainWindow(this);
 
     // local status widget
     localStatus = new QLabel(this);
@@ -36,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     refreshSessionList();
 
     // timer
-    connect(&timer, SIGNAL(timeout()), this, SLOT(timeout()));
+    QObject::connect(&processTimer, SIGNAL(process()), this, SLOT(process()));
 }
 
 MainWindow::~MainWindow()
@@ -45,7 +46,7 @@ MainWindow::~MainWindow()
 }
 
 // render loop
-void MainWindow::timeout()
+void MainWindow::process()
 {
     Mat frame = videoHandler.getFrame();
     Point2f localPos = imageProcessor.process(frame);
@@ -132,7 +133,7 @@ void MainWindow::startToggled(bool state)
         // switching the video ON
         qDebug("video: ON");
         videoHandler.start(1);
-        timer.start(100);
+        processTimer.start(100);
         ui->videoCanvas->setHidden(false);
         ui->displayGroup->setHidden(false);
         ui->pupilButton->setChecked(true);
@@ -151,7 +152,7 @@ void MainWindow::startToggled(bool state)
         qDebug("video: OFF");
         ui->videoCanvas->setHidden(true);
         ui->displayGroup->setHidden(true);
-        timer.stop();
+        processTimer.stop();
         videoHandler.stop();
         localStatus->setHidden(true);
     }
@@ -273,7 +274,7 @@ void MainWindow::playClicked()
     qDebug("play");
     int index = ui->listWidget->selectionModel()->selectedIndexes().at(0).row();
 
-    cout << index << endl;
+    player.startPlayback(sessions.at(index));
 
     return;
 }

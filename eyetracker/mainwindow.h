@@ -8,6 +8,7 @@
 #include "imageprocessor.h"
 #include "calibrator.h"
 #include "recorder.h"
+#include "player.h"
 #include "session.h"
 
 namespace Ui {
@@ -21,6 +22,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    static const int PROCESS_TIMEOUT = 100;
 
 public slots:
     // general
@@ -53,18 +56,19 @@ private:
     QLabel* localStatus;
     QLabel* screenStatus;
 
-    QTimer timer;
+    QTimer processTimer;
     VideoHandler videoHandler;
     ImageProcessor imageProcessor;
     Calibrator calibrator;
     Recorder recorder;
+    Player player;
 
     void findSessions();
     void refreshSessionList();
     vector<Session> sessions;
 
 private slots:
-    void timeout();
+    void process();
     void startRecording();
     void stopRecording();
 
