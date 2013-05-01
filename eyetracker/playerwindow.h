@@ -20,7 +20,8 @@ public:
     void reject();
 
     void setPlayer(Player*);
-    void setImage(const QImage& image);
+    void setImage(const QImage&);
+    void setFrameCount(int, int);
 
 private:
     Ui::PlayerWindow *ui;

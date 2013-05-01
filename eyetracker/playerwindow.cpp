@@ -26,6 +26,13 @@ void PlayerWindow::setPlayer(Player *p_player)
     player = p_player;
 }
 
+void PlayerWindow::setFrameCount(int num, int sum)
+{
+    stringstream s;
+    s << num << " / " << sum;
+    ui->frameCount->setText(QString(s.str().c_str()));
+}
+
 void PlayerWindow::setImage(const QImage& image)
 {
     ui->bgImage->setPixmap(QPixmap::fromImage(image));

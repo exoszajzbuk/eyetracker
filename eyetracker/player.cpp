@@ -94,5 +94,6 @@ void Player::process()
         frame++;
 
     // set image
+    window->setFrameCount(frame+1, session.getPoints().size());
     window->setImage(Helper::mat2qimage(image));
 }
