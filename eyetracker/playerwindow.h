@@ -1,8 +1,8 @@
 #ifndef PLAYERWINDOW_H
 #define PLAYERWINDOW_H
 
-
 #include <QDialog>
+#include <QImage>
 
 namespace Ui {
 class PlayerWindow;
@@ -20,7 +20,8 @@ public:
     void reject();
 
     void setPlayer(Player*);
-    
+    void setImage(const QImage& image);
+
 private:
     Ui::PlayerWindow *ui;
     Player* player;

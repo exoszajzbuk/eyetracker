@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "sessionitemwidget.h"
+#include "helper.h"
 
 #include <QDebug>
 #include <QMessageBox>
@@ -37,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     refreshSessionList();
 
     // timer
-    QObject::connect(&processTimer, SIGNAL(process()), this, SLOT(process()));
+    QObject::connect(&processTimer, SIGNAL(timeout()), this, SLOT(process()));
 }
 
 MainWindow::~MainWindow()
@@ -106,7 +107,7 @@ void MainWindow::process()
     }
 
     // set video
-    ui->videoCanvas->setPixmap(QPixmap::fromImage(videoHandler.convert(image)).scaled(320, 240));
+    ui->videoCanvas->setPixmap(QPixmap::fromImage(Helper::mat2qimage(image)).scaled(320, 240));
 }
 
 // ----------------------------------------------------------------------------
@@ -133,7 +134,7 @@ void MainWindow::startToggled(bool state)
         // switching the video ON
         qDebug("video: ON");
         videoHandler.start(1);
-        processTimer.start(100);
+        processTimer.start(PROCESS_TIMEOUT);
         ui->videoCanvas->setHidden(false);
         ui->displayGroup->setHidden(false);
         ui->pupilButton->setChecked(true);

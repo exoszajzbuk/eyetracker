@@ -23,7 +23,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    static const int PROCESS_TIMEOUT = 100;
+    static const int PROCESS_TIMEOUT = 50;
 
 public slots:
     // general

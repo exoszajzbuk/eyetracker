@@ -6,13 +6,19 @@
 
 #include <QTimer>
 #include <QObject>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+using namespace std;
 
 class MainWindow;
 
 class Player : public QObject
 {
+    Q_OBJECT
+
 public:
-    Player();
+    explicit Player(QWidget *parent = 0);
     ~Player();
 
     void setMainWindow(MainWindow*);
@@ -26,6 +32,10 @@ private:
 
     Session session;
     QTimer processTimer;
+
+    Mat image;
+    Mat background;
+    unsigned int frame;
 
 private slots:
     void process();

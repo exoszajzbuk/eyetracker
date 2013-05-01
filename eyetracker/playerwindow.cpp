@@ -26,6 +26,11 @@ void PlayerWindow::setPlayer(Player *p_player)
     player = p_player;
 }
 
+void PlayerWindow::setImage(const QImage& image)
+{
+    ui->bgImage->setPixmap(QPixmap::fromImage(image));
+}
+
 void PlayerWindow::reject()
 {
     player->stopPlayback();

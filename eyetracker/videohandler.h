@@ -15,12 +15,10 @@ public:
     void stop();
 
     const Mat &getFrame();
-    QImage convert(const Mat&);
 
 private:
     VideoCapture cap;
     Mat frame;
-
 };
 
 #endif // VIDEOHANDLER_H
