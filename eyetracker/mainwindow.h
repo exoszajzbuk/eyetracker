@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QProgressBar>
 #include <QTimer>
 #include "videohandler.h"
 #include "imageprocessor.h"
@@ -56,6 +57,7 @@ private:
 
     QLabel* localStatus;
     QLabel* screenStatus;
+    QProgressBar* heatmapProgress;
 
     QTimer processTimer;
 

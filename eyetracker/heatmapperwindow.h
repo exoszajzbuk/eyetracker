@@ -14,6 +14,8 @@ class HeatmapperWindow : public QDialog
 public:
     explicit HeatmapperWindow(QWidget *parent = 0);
     ~HeatmapperWindow();
+
+    void setImage(const QImage& image);
     
 private:
     Ui::HeatmapperWindow *ui;

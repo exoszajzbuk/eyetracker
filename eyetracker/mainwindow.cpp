@@ -35,6 +35,12 @@ MainWindow::MainWindow(QWidget *parent) :
     screenStatus->setHidden(true);
     ui->statusBar->addPermanentWidget(screenStatus);
 
+    // generate heatmap progress
+    heatmapProgress = new QProgressBar(this);
+    heatmapProgress->setHidden(true);
+    heatmapProgress->setValue(0);
+    ui->statusBar->addPermanentWidget(heatmapProgress);
+
     // refresh sessionlist
     refreshSessionList();
 
@@ -286,7 +292,8 @@ void MainWindow::heatMapClicked()
     qDebug("heat map");
     int index = ui->listWidget->selectionModel()->selectedIndexes().at(0).row();
 
-    heatMapper.generate(sessions.at(index));
+    heatmapProgress->setHidden(false);
+    heatMapper.generate(sessions.at(index), heatmapProgress);
 
     return;
 }

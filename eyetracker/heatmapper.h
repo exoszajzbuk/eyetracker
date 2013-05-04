@@ -4,6 +4,7 @@
 #include "heatmapperwindow.h"
 #include "session.h"
 
+#include <QProgressBar>
 #include <opencv2/opencv.hpp>
 
 using namespace cv;
@@ -18,7 +19,7 @@ public:
     ~Heatmapper();
 
     void setMainWindow(MainWindow*);
-    void generate(const Session& session);
+    void generate(const Session&, QProgressBar*);
 
 private:
     HeatmapperWindow* window;
