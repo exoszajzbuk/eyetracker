@@ -6,14 +6,11 @@ This is the home page of a gaze tracking application for my master's thesis on *
 
 ## Resources
 
-Please check out the various resources below, in order to discover the results of the implementation or if you want to compile project for yourself.
+Please check out the various resources below, in order to [discover the results](#videos) of the implementation, if you'd like to [to read the thesis](#thesis), or if you want to [compile the project](#libraries) for yourself.
 
-#### Videos
+#### Media
 
 * demo video gallery | [Vimeo](https://vimeo.com/album/2395742) | [Dropbox](https://www.dropbox.com/sh/qvk57vyapxr0z46/QryLYUI6BB)
-
-#### Galleries
-
 * general demo images | [Dropbox](https://www.dropbox.com/sh/0k9geptwbc83wz2/ylA9T6vAdh)
 * psychological demo images | [Dropbox](https://www.dropbox.com/sh/oez5lwjlkhnlpj9/M3LmP5PvKb)
 
