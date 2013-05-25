@@ -2,6 +2,8 @@
 
 This is the home page of a gaze tracking application for my master's thesis on *Budapest University of Technology and Economics*.
 
+[[gui.png]]
+
 ### Resources
 
 #### Libraries
