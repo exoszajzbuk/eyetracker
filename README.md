@@ -2,6 +2,8 @@
 
 This is the home page of a gaze tracking application for my master's thesis on *Budapest University of Technology and Economics*.
 
+The thesis is written under the title **Development of a Gaze Tracking System Based on Image Processing**. In this repository the developed application can be found, as well as various resources regarding for testing, documentation and demonstration.
+
 ![asdf](https://raw.github.com/obrien/eyetracker/master/gui.png)
 
 ## Resources
