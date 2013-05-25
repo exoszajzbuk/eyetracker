@@ -4,26 +4,30 @@ This is the home page of a gaze tracking application for my master's thesis on *
 
 ![asdf](https://raw.github.com/obrien/eyetracker/master/gui.png)
 
-### Resources
+## Resources
 
-#### Libraries
-* OpenCV 2.3.0 | [link](http://sourceforge.net/projects/opencvlibrary/files/opencv-win/2.3/)
-* Qt 4.7.4 | [link](http://download.qt-project.org/archive/qt/4.7/qt-win-opensource-4.7.4-mingw.exe)
+Please check out the various resources below, in order to discover the results of the implementation or if you want to compile project for yourself.
+
+#### Videos
+
+* demo video gallery | [Vimeo](https://vimeo.com/album/2395742) | [Dropbox](https://www.dropbox.com/sh/qvk57vyapxr0z46/QryLYUI6BB)
 
 #### Galleries
 
 * general demo images | [Dropbox](https://www.dropbox.com/sh/0k9geptwbc83wz2/ylA9T6vAdh)
 * psychological demo images | [Dropbox](https://www.dropbox.com/sh/oez5lwjlkhnlpj9/M3LmP5PvKb)
 
-#### Videos
-
-* demo videos | [Vimeo](https://vimeo.com/album/2395742) | [Dropbox](https://www.dropbox.com/sh/qvk57vyapxr0z46/QryLYUI6BB)
-
 #### Thesis
 
 * LaTeX source | [GitHub](https://github.com/obrien/msc_thesis/)
 * in PDF format | [GitHub](https://github.com/obrien/msc_thesis/blob/master/msc_thesis.pdf)
 
-### Contact
+#### Libraries
+* OpenCV 2.3.0 | [direct link](http://sourceforge.net/projects/opencvlibrary/files/opencv-win/2.3/OpenCV-2.3.0-win-src.zip/download)
+* Qt 4.7.4 | [direct link](http://download.qt-project.org/archive/qt/4.7/qt-win-opensource-4.7.4-mingw.exe)
+
+## Contact
+
+Feel free to cantact me in the Vimeo comments, or by e-mail.
 
 * Balazs Kovacs | obrien@sch.bme.hu
