@@ -2,7 +2,7 @@
 
 This is the home page of a gaze tracking application for my master's thesis on *Budapest University of Technology and Economics*.
 
-[[gui.png]]
+![asdf](https://raw.github.com/obrien/eyetracker/master/gui.png)
 
 ### Resources
 
@@ -26,4 +26,4 @@ This is the home page of a gaze tracking application for my master's thesis on *
 
 ### Contact
 
-Balazs Kovacs | obrien@sch.bme.hu
+* Balazs Kovacs | obrien@sch.bme.hu
