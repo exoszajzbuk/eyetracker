@@ -19,7 +19,7 @@ Please check out the various resources below, in order to [discover the results]
 #### Thesis
 
 * LaTeX source | [GitHub](https://github.com/obrien/msc_thesis/)
-* in PDF format | [GitHub](https://github.com/obrien/msc_thesis/blob/master/msc_thesis.pdf)
+* in PDF format | [Dropbox](https://www.dropbox.com/s/nslac6uaj3rbe1g/diplomaterv_kovacs_balazs_2013.pdf)
 
 #### Libraries
 * OpenCV 2.3.0 | [direct link](http://sourceforge.net/projects/opencvlibrary/files/opencv-win/2.3/OpenCV-2.3.0-win-src.zip/download)
