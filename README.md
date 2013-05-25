@@ -12,18 +12,18 @@ Please check out the various resources below, in order to [discover the results]
 
 #### Media
 
-* demo video gallery | [Vimeo](https://vimeo.com/album/2395742) | [Dropbox](https://www.dropbox.com/sh/qvk57vyapxr0z46/QryLYUI6BB)
-* general demo images | [Dropbox](https://www.dropbox.com/sh/0k9geptwbc83wz2/ylA9T6vAdh)
-* psychological demo images | [Dropbox](https://www.dropbox.com/sh/oez5lwjlkhnlpj9/M3LmP5PvKb)
+* demo video gallery | [view](https://vimeo.com/album/2395742) on Vimeo | [view](https://www.dropbox.com/sh/qvk57vyapxr0z46/QryLYUI6BB) on Dropbox
+* general demo images | [view](https://www.dropbox.com/sh/0k9geptwbc83wz2/ylA9T6vAdh)
+* psychological demo images | [view](https://www.dropbox.com/sh/oez5lwjlkhnlpj9/M3LmP5PvKb)
 
 #### Thesis
 
-* LaTeX source | [GitHub](https://github.com/obrien/msc_thesis/)
-* in PDF format | [Dropbox](https://www.dropbox.com/s/nslac6uaj3rbe1g/diplomaterv_kovacs_balazs_2013.pdf)
+* LaTeX source | [browse](https://github.com/obrien/msc_thesis/)
+* in PDF format | [download](https://www.dropbox.com/s/nslac6uaj3rbe1g/diplomaterv_kovacs_balazs_2013.pdf)
 
 #### Libraries
-* OpenCV 2.3.0 | [direct link](http://sourceforge.net/projects/opencvlibrary/files/opencv-win/2.3/OpenCV-2.3.0-win-src.zip/download)
-* Qt 4.7.4 | [direct link](http://download.qt-project.org/archive/qt/4.7/qt-win-opensource-4.7.4-mingw.exe)
+* OpenCV 2.3.0 | [download](http://sourceforge.net/projects/opencvlibrary/files/opencv-win/2.3/OpenCV-2.3.0-win-src.zip/download)
+* Qt 4.7.4 | [download](http://download.qt-project.org/archive/qt/4.7/qt-win-opensource-4.7.4-mingw.exe)
 
 ## Contact
 
